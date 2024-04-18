@@ -26,14 +26,26 @@ kotlin {
     jvm()
 
     sourceSets {
+        val kotestVersion: String by project
+
         val commonMain by getting {}
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                implementation("io.kotest:kotest-framework-engine:$kotestVersion")
+                implementation("io.kotest:kotest-property:$kotestVersion")
             }
         }
 
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+            }
+        }
         /*
         val javaMain by creating {
             dependsOn(commonMain)
