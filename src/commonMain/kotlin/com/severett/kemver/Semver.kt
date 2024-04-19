@@ -18,9 +18,9 @@ class Semver {
         preRelease: List<String> = emptyList(),
         build: List<String> = emptyList(),
     ) {
-        check(major >= 0) { "Major [$major] should be >= 0" }
-        check(minor >= 0) { "Minor [$minor] should be >= 0" }
-        check(patch >= 0) { "Patch [$patch] should be >= 0" }
+        if (major < 0) throw SemverException("Major [$major] should be >= 0")
+        if (minor < 0) throw SemverException("Minor [$minor] should be >= 0")
+        if (patch < 0) throw SemverException("Patch [$patch] should be >= 0")
         this.major = major
         this.minor = minor
         this.patch = patch
