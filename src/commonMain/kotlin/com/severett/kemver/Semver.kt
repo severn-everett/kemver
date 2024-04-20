@@ -3,6 +3,9 @@ package com.severett.kemver
 import com.severett.kemver.Tokenizers.STRICT
 
 private val STRICT_REGEX = Regex(STRICT)
+private val COERCE_REGEX = Regex(
+    "(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)"
+)
 
 class Semver {
     val major: Int
@@ -69,7 +72,34 @@ class Semver {
         }
     }
 
+    companion object {
+        @JvmStatic
+        fun parse(version: String?): Semver? {
+            return version?.let {
+                try {
+                    Semver(version)
+                } catch (e: Exception) {
+                    null
+                }
+            }
+        }
 
+        @JvmStatic
+        fun coerce(version: String?): Semver? {
+            if (version == null) return null
+
+            return parse(version) ?: COERCE_REGEX.find(version)?.let { matchResult ->
+                Semver(
+                    major = matchResult.groupValues[2].toInt(),
+                    minor = matchResult.groupValues[3].toIntOrNull() ?: 0,
+                    patch = matchResult.groupValues[4].toIntOrNull() ?: 0,
+                )
+            }
+        }
+
+        @JvmStatic
+        fun isValid(version: String?) = parse(version) != null
+    }
 }
 
 private fun parseInt(intStr: String) = intStr.toIntOrNull()

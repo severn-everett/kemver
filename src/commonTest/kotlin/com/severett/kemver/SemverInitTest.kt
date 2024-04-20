@@ -54,7 +54,6 @@ class SemverInitTest : FunSpec({
         "01.1.1",
         "1.01.1",
         "1.1.01",
-        "1.2",
         "1.2.3.DEV",
         "1.2-SNAPSHOT",
         "1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788",
@@ -101,6 +100,85 @@ class SemverInitTest : FunSpec({
         test(title) {
             val thrownException = shouldThrow<SemverException>(semverInit)
             thrownException.message shouldBe expectedMessage
+        }
+    }
+
+    test("It should parse a valid version string successfully") {
+        Semver.parse("1.0.0") shouldBe Semver(1, 0, 0)
+    }
+
+    listOf("INVALID", null).forEach { invalid ->
+        test("It should return null when parsing an invalid version string of [$invalid]") {
+            Semver.parse(invalid) shouldBe null
+        }
+    }
+
+    listOf(
+        "1.0.0" to true,
+        "INVALID" to false,
+    ).forEach { (versionStr, expectedResult) ->
+        test("It should return $expectedResult when determining validity of [$versionStr]") {
+            Semver.isValid(versionStr) shouldBe expectedResult
+        }
+    }
+
+    listOf(
+        ".1" to Semver("1.0.0"),
+        ".1." to Semver("1.0.0"),
+        "..1" to Semver("1.0.0"),
+        ".1.1" to Semver("1.1.0"),
+        "1." to Semver("1.0.0"),
+        "1.0" to Semver("1.0.0"),
+        "1.0.0" to Semver("1.0.0"),
+        "0" to Semver("0.0.0"),
+        "0.0" to Semver("0.0.0"),
+        "0.0.0" to Semver("0.0.0"),
+        "0.1" to Semver("0.1.0"),
+        "0.0.1" to Semver("0.0.1"),
+        "0.1.1" to Semver("0.1.1"),
+        "1" to Semver("1.0.0"),
+        "1.2" to Semver("1.2.0"),
+        "1.2.3" to Semver("1.2.3"),
+        "1.2.3.4" to Semver("1.2.3"),
+        "13" to Semver("13.0.0"),
+        "35.12" to Semver("35.12.0"),
+        "35.12.18" to Semver("35.12.18"),
+        "35.12.18.24" to Semver("35.12.18"),
+        "v1" to Semver("1.0.0"),
+        "v1.2" to Semver("1.2.0"),
+        "v1.2.3" to Semver("1.2.3"),
+        "v1.2.3.4" to Semver("1.2.3"),
+        " 1" to Semver("1.0.0"),
+        "1 " to Semver("1.0.0"),
+        "1 0" to Semver("1.0.0"),
+        "1 1" to Semver("1.0.0"),
+        "1.1 1" to Semver("1.1.0"),
+        "1.1-1" to Semver("1.1.0"),
+        "a1" to Semver("1.0.0"),
+        "a1a" to Semver("1.0.0"),
+        "1a" to Semver("1.0.0"),
+        "version 1" to Semver("1.0.0"),
+        "version1" to Semver("1.0.0"),
+        "version1.0" to Semver("1.0.0"),
+        "version1.1" to Semver("1.1.0"),
+        "42.6.7.9.3-alpha" to Semver("42.6.7"),
+        "v2" to Semver("2.0.0"),
+        "v3.4 replaces v3.3.1" to Semver("3.4.0"),
+        "4.6.3.9.2-alpha2" to Semver("4.6.3"),
+        "${"1".repeat(17)}.2" to Semver("2.0.0"),
+        "${"1".repeat(17)}.2.3" to Semver("2.3.0"),
+        "1.${"2".repeat(17)}.3" to Semver("1.0.0"),
+        "1.2.${"3".repeat(17)}" to Semver("1.2.0"),
+        "${"1".repeat(17)}.2.3.4" to Semver("2.3.4"),
+        "1.${"2".repeat(17)}.3.4" to Semver("1.0.0"),
+        "1.2.${"3".repeat(17)}.4" to Semver("1.2.0"),
+        "10" to Semver("10.0.0"),
+        "3.2.1-rc.2" to Semver("3.2.1-rc.2"),
+        null to null,
+        "INVALID" to null,
+    ).forEach { (versionStr, expectedResult) ->
+        test("It should coerce [$versionStr] to Semver [$expectedResult]") {
+            Semver.coerce(versionStr) shouldBe expectedResult
         }
     }
 })
