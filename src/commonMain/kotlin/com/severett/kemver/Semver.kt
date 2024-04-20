@@ -13,6 +13,8 @@ class Semver {
     val patch: Int
     val preRelease: List<String>
     val build: List<String>
+    val isStable: Boolean
+        get() = major > 0 && preRelease.isEmpty()
 
     constructor(
         major: Int,

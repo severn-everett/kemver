@@ -181,4 +181,14 @@ class SemverInitTest : FunSpec({
             Semver.coerce(versionStr) shouldBe expectedResult
         }
     }
+
+    listOf(
+        Semver(1, 0, 0) to true,
+        Semver(0, 1, 0) to false,
+        Semver(1, 0, 0, preRelease = listOf("PRE_RELEASE")) to false,
+    ).forEach { (semver, expectedIsStable) ->
+        test("isStable field for Semver [$semver] should equal $expectedIsStable") {
+            semver.isStable shouldBe expectedIsStable
+        }
+    }
 })
