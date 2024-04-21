@@ -44,6 +44,89 @@ class Semver {
         build = parseList(matchResult.groupValues[5])
     }
 
+    fun nextMajor() = Semver(
+        // Prerelease version 1.0.0-5 bumps to 1.0.0
+        major = if (minor != 0 || patch != 0 || preRelease.isEmpty()) major + 1 else major,
+        minor = 0,
+        patch = 0,
+        build = build,
+    )
+
+    fun withIncMajor(number: Int) = Semver(
+        major = major + number,
+        minor = minor,
+        patch = patch,
+        preRelease = preRelease,
+        build = build,
+    )
+
+    fun nextMinor() = Semver(
+        major = major,
+        // Prerelease version 1.2.0-5 bumps to 1.2.0
+        minor = if (patch != 0 || preRelease.isEmpty()) minor + 1 else minor,
+        patch = 0,
+        build = build,
+    )
+
+    fun withIncMinor(number: Int) = Semver(
+        major = major,
+        minor = minor + number,
+        patch = patch,
+        preRelease = preRelease,
+        build = build,
+    )
+
+    fun nextPatch() = Semver(
+        major = major,
+        minor = minor,
+        // Prerelease version 1.2.0-5 bumps to 1.2.0
+        patch = if (preRelease.isEmpty()) patch + 1 else patch,
+        build = build,
+    )
+
+    fun withIncPatch(number: Int) = Semver(
+        major = major,
+        minor = minor,
+        patch = patch + number,
+        preRelease = preRelease,
+        build = build,
+    )
+
+    fun withPreRelease(newPreRelease: List<String>) = Semver(
+        major = major,
+        minor = minor,
+        patch = patch,
+        preRelease = newPreRelease,
+        build = build,
+    )
+
+    fun withPreRelease(newPreRelease: String) = withPreRelease(newPreRelease.split("."))
+
+    fun withBuild(newBuild: List<String>) = Semver(
+        major = major,
+        minor = minor,
+        patch = patch,
+        preRelease = preRelease,
+        build = newBuild,
+    )
+
+    fun withBuild(newBuild: String) = withBuild(newBuild.split("."))
+
+    fun withClearedPreRelease() = withPreRelease(emptyList())
+
+    fun withClearedBuild() = withBuild(emptyList())
+
+    fun withClearedPreReleaseAndBuild() = Semver(major = major, minor = minor, patch = patch)
+
+    fun diff(version: Semver) = when {
+        major != version.major -> VersionDiff.MAJOR
+        minor != version.minor -> VersionDiff.MINOR
+        patch != version.patch -> VersionDiff.PATCH
+        preRelease != version.preRelease -> VersionDiff.PRE_RELEASE
+        build != version.build -> VersionDiff.BUILD
+        else -> VersionDiff.NONE
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Semver) return false
@@ -101,6 +184,15 @@ class Semver {
 
         @JvmStatic
         fun isValid(version: String?) = parse(version) != null
+    }
+
+    enum class VersionDiff {
+        NONE,
+        BUILD,
+        PRE_RELEASE,
+        PATCH,
+        MINOR,
+        MAJOR,
     }
 }
 

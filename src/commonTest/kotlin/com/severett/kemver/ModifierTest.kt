@@ -1,17 +1,5 @@
-package com.severett.kemver.extension
+package com.severett.kemver
 
-import com.severett.kemver.Semver
-import com.severett.kemver.extensions.Modifier.nextMajor
-import com.severett.kemver.extensions.Modifier.nextMinor
-import com.severett.kemver.extensions.Modifier.nextPatch
-import com.severett.kemver.extensions.Modifier.withBuild
-import com.severett.kemver.extensions.Modifier.withClearedBuild
-import com.severett.kemver.extensions.Modifier.withClearedPreRelease
-import com.severett.kemver.extensions.Modifier.withClearedPreReleaseAndBuild
-import com.severett.kemver.extensions.Modifier.withIncMajor
-import com.severett.kemver.extensions.Modifier.withIncMinor
-import com.severett.kemver.extensions.Modifier.withIncPatch
-import com.severett.kemver.extensions.Modifier.withPreRelease
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
