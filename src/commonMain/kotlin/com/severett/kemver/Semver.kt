@@ -52,7 +52,7 @@ class Semver {
         build = build,
     )
 
-    fun withIncMajor(number: Int) = Semver(
+    fun withIncMajor(number: Int = 1) = Semver(
         major = major + number,
         minor = minor,
         patch = patch,
@@ -68,7 +68,7 @@ class Semver {
         build = build,
     )
 
-    fun withIncMinor(number: Int) = Semver(
+    fun withIncMinor(number: Int = 1) = Semver(
         major = major,
         minor = minor + number,
         patch = patch,
@@ -84,7 +84,7 @@ class Semver {
         build = build,
     )
 
-    fun withIncPatch(number: Int) = Semver(
+    fun withIncPatch(number: Int = 1) = Semver(
         major = major,
         minor = minor,
         patch = patch + number,
@@ -117,6 +117,8 @@ class Semver {
     fun withClearedBuild() = withBuild(emptyList())
 
     fun withClearedPreReleaseAndBuild() = Semver(major = major, minor = minor, patch = patch)
+
+    fun diff(version: String) = diff(Semver(version))
 
     fun diff(version: Semver) = when {
         major != version.major -> VersionDiff.MAJOR

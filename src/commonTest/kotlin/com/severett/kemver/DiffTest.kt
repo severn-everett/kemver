@@ -38,4 +38,8 @@ class DiffTest : FunSpec({
             baseSemver.diff(otherSemver) shouldBe expectedDiff
         }
     }
+
+    test("Comparing string [2.2.3] to Semver $baseSemver should return a diff of [${Semver.VersionDiff.MAJOR}") {
+        baseSemver.diff("2.2.3") shouldBe Semver.VersionDiff.MAJOR
+    }
 })

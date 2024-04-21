@@ -3,6 +3,8 @@ package com.severett.kemver
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
+private data class WithCallbackTest(val title: String, val callback: (Semver) -> Semver, val expectedSemver: Semver)
+
 class ModifierTest : FunSpec({
     listOf(
         Semver("1.0.0") to Semver(2, 0, 0),
@@ -15,8 +17,21 @@ class ModifierTest : FunSpec({
         }
     }
 
-    test("Semver should be able to increment major") {
-        Semver("1.0.0").withIncMajor(1) shouldBe Semver(2, 0, 0)
+    listOf(
+        WithCallbackTest(
+            title = "Semver should be able to increment major with a default value",
+            callback = Semver::withIncMajor,
+            expectedSemver = Semver(2, 0, 0)
+        ),
+        WithCallbackTest(
+            title = "Semver should be able to increment major with a specified value",
+            callback = { s -> s.withIncMajor(2) },
+            expectedSemver = Semver(3, 0, 0)
+        ),
+    ).forEach { (title, callback, expectedSemver) ->
+        test(title) {
+            callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
+        }
     }
 
     listOf(
@@ -29,8 +44,21 @@ class ModifierTest : FunSpec({
         }
     }
 
-    test("Semver should be able to increment minor") {
-        Semver("1.0.0").withIncMinor(1) shouldBe Semver(1, 1, 0)
+    listOf(
+        WithCallbackTest(
+            title = "Semver should be able to increment minor with a default value",
+            callback = Semver::withIncMinor,
+            expectedSemver = Semver(1, 1, 0)
+        ),
+        WithCallbackTest(
+            title = "Semver should be able to increment minor with a specified value",
+            callback = { s -> s.withIncMinor(2) },
+            expectedSemver = Semver(1, 2, 0)
+        ),
+    ).forEach { (title, callback, expectedSemver) ->
+        test(title) {
+            callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
+        }
     }
 
     listOf(
@@ -42,8 +70,21 @@ class ModifierTest : FunSpec({
         }
     }
 
-    test("Semver should be able to increment patch") {
-        Semver("1.0.0").withIncPatch(1) shouldBe Semver(1, 0, 1)
+    listOf(
+        WithCallbackTest(
+            title = "Semver should be able to increment patch with a default value",
+            callback = Semver::withIncPatch,
+            expectedSemver = Semver(1, 0, 1)
+        ),
+        WithCallbackTest(
+            title = "Semver should be able to increment patch with a specified value",
+            callback = { s -> s.withIncPatch(2) },
+            expectedSemver = Semver(1, 0, 2)
+        ),
+    ).forEach { (title, callback, expectedSemver) ->
+        test(title) {
+            callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
+        }
     }
 
     listOf(
