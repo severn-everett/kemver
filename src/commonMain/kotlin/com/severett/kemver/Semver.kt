@@ -129,6 +129,10 @@ class Semver {
         else -> VersionDiff.NONE
     }
 
+    fun isApiCompatible(version: Semver) = diff(version) < VersionDiff.MAJOR
+
+    fun isApiCompatible(version: String) = isApiCompatible(Semver(version))
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Semver) return false

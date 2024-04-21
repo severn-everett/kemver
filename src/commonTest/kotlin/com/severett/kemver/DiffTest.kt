@@ -39,7 +39,23 @@ class DiffTest : FunSpec({
         }
     }
 
-    test("Comparing string [2.2.3] to Semver $baseSemver should return a diff of [${Semver.VersionDiff.MAJOR}") {
+    test("Comparing string [2.2.3] to Semver [$baseSemver] should return a diff of [${Semver.VersionDiff.MAJOR}") {
         baseSemver.diff("2.2.3") shouldBe Semver.VersionDiff.MAJOR
+    }
+
+    listOf(
+        createSemver(major = 0) to false,
+        createSemver(minor = 0) to true,
+        createSemver(patch = 0) to true,
+        createSemver(preRelease = emptyList()) to true,
+        createSemver(build = emptyList()) to true,
+    ).forEach { (otherSemver, expectedResult) ->
+        test("Comparing API compatibility of Semver [$otherSemver] to Semver [$baseSemver] should produce $expectedResult") {
+            baseSemver.isApiCompatible(otherSemver) shouldBe expectedResult
+        }
+    }
+
+    test("Comparing API compatibility of string [2.2.3] to Semver [$baseSemver] should produce false") {
+        baseSemver.isApiCompatible("2.2.3") shouldBe false
     }
 })
