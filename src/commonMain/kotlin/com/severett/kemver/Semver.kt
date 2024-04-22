@@ -7,7 +7,7 @@ private val COERCE_REGEX = Regex(
     "(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)"
 )
 
-class Semver {
+class Semver : Comparable<Semver> {
     val major: Int
     val minor: Int
     val patch: Int
@@ -15,6 +15,7 @@ class Semver {
     val build: List<String>
     val isStable: Boolean
         get() = major > 0 && preRelease.isEmpty()
+    val version: String
 
     constructor(
         major: Int,
@@ -31,6 +32,7 @@ class Semver {
         this.patch = patch
         this.preRelease = preRelease
         this.build = build
+        this.version = createVersion(major, minor, patch, preRelease, build)
     }
 
     constructor(versionStr: String) {
@@ -42,6 +44,7 @@ class Semver {
         patch = parseInt(matchResult.groupValues[3])
         preRelease = parseList(matchResult.groupValues[4])
         build = parseList(matchResult.groupValues[5])
+        version = createVersion(major, minor, patch, preRelease, build)
     }
 
     fun nextMajor() = Semver(
@@ -133,6 +136,32 @@ class Semver {
 
     fun isApiCompatible(version: String) = isApiCompatible(Semver(version))
 
+    override fun compareTo(other: Semver) = SemverComparator.compare(this, other)
+
+    infix fun isGreaterThan(other: Semver) = this > other
+
+    infix fun isGreaterThan(other: String) = isGreaterThan(Semver(other))
+
+    infix fun isGreaterThanOrEqualTo(other: Semver) = this >= other
+
+    infix fun isGreaterThanOrEqualTo(other: String) = isGreaterThanOrEqualTo(Semver(other))
+
+    infix fun isLowerThan(other: Semver) = this < other
+
+    infix fun isLowerThan(other: String) = isLowerThan(Semver(other))
+
+    infix fun isLowerThanOrEqualTo(other: Semver) = this <= other
+
+    infix fun isLowerThanOrEqualTo(other: String) = isLowerThanOrEqualTo(Semver(other))
+
+    infix fun isEqualTo(other: Semver) = this == other
+
+    infix fun isEqualTo(other: String) = isEqualTo(Semver(other))
+
+    infix fun isEquivalentTo(other: Semver) = compareTo(other) == 0
+
+    infix fun isEquivalentTo(other: String) = isEquivalentTo(Semver(other))
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Semver) return false
@@ -155,13 +184,7 @@ class Semver {
         return result
     }
 
-    override fun toString(): String {
-        return buildString {
-            append("$major.$minor.$patch")
-            if (preRelease.isNotEmpty()) append("-${preRelease.joinToString(".")}")
-            if (build.isNotEmpty()) append("+${build.joinToString(".")}")
-        }
-    }
+    override fun toString() = version
 
     companion object {
         @JvmStatic
@@ -207,3 +230,11 @@ private fun parseInt(intStr: String) = intStr.toIntOrNull()
     ?: throw SemverException("Value [$intStr] must be a number between 0 and ${Int.MAX_VALUE}")
 
 private fun parseList(listStr: String) = listStr.split(".").filter { it.trim().isNotEmpty() }
+
+private fun createVersion(major: Int, minor: Int, patch: Int, preRelease: List<String>, build: List<String>): String {
+    return buildString {
+        append("$major.$minor.$patch")
+        if (preRelease.isNotEmpty()) append("-${preRelease.joinToString(".")}")
+        if (build.isNotEmpty()) append("+${build.joinToString(".")}")
+    }
+}
