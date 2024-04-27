@@ -188,6 +188,9 @@ class Semver : Comparable<Semver> {
 
     companion object {
         @JvmStatic
+        val ZERO = Semver(major = 0, minor = 0, patch = 0)
+
+        @JvmStatic
         fun parse(version: String?): Semver? {
             return version?.let {
                 try {
