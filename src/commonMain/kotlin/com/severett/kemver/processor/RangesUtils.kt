@@ -3,8 +3,8 @@ package com.severett.kemver.processor
 internal object RangesUtils {
     private const val X_RANGE_MARKER = -1
     private const val X_CHAR = "x"
-    private const val ASTERISK = "*"
     private const val PLUS = "+"
+    const val ASTERISK = "*"
     const val EMPTY = ""
     const val SPACE = " "
 
