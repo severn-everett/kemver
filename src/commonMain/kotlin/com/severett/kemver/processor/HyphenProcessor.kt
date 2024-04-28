@@ -6,12 +6,12 @@ import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
 object HyphenProcessor : Processor {
-    private val pattern = Regex(HYPHEN)
+    private val regex = Regex(HYPHEN)
 
     override fun process(range: String): String {
-        return pattern.matchEntire(range)?.let { matchResult ->
-            "${getRangeFrom(matchResult)} ${getRangeTo(matchResult)}"
-        } ?: range
+        val matchResult = regex.matchEntire(range) ?: return range
+
+        return "${getRangeFrom(matchResult)} ${getRangeTo(matchResult)}"
     }
 
     private fun getRangeFrom(matchResult: MatchResult): String {
