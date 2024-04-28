@@ -1,7 +1,10 @@
 package com.severett.kemver
 
 import com.severett.kemver.RangesExpression.Companion.equal
+import com.severett.kemver.RangesExpression.Companion.greater
+import com.severett.kemver.RangesExpression.Companion.greaterOrEqual
 import com.severett.kemver.RangesExpression.Companion.less
+import com.severett.kemver.RangesExpression.Companion.lessOrEqual
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -27,12 +30,33 @@ class RangesExpressionTest : FunSpec({
             .and(
                 equal("2.0.0")
                     .and(equal("3.0.0"))
-                    .or(equal("4.0.0").and(equal("5.0.0")))
+                    .or(greater("4.0.0").and(less("5.0.0")))
                     .or(equal("6.0.0"))
-            ).and(less("7.0.0"))
-            .and(equal("8.0.0"))
+            ).and(greaterOrEqual("7.0.0"))
+            .and(lessOrEqual("8.0.0"))
             .or(less("9.0.0"))
 
-        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (=4.0.0 and =5.0.0) or =6.0.0 or (<7.0.0 and =8.0.0) or <9.0.0"
+        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
+    }
+
+    test("A complex range expression should be built using lambdas") {
+        val rangeExpressions = equal("1.0.0") {
+            and {
+                equal("2.0.0") {
+                    and { equal("3.0.0") }
+                    or {
+                        greater("4.0.0") {
+                            and { less("5.0.0") {} }
+                        }
+                    }
+                    or { equal("6.0.0") }
+                }
+            }
+            and { greaterOrEqual("7.0.0") {} }
+            and { lessOrEqual("8.0.0") {} }
+            or { less("9.0.0") }
+        }
+
+        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
     }
 })
