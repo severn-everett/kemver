@@ -3,9 +3,7 @@ package com.severett.kemver
 import com.severett.kemver.Tokenizers.STRICT
 
 private val STRICT_REGEX = Regex(STRICT)
-private val COERCE_REGEX = Regex(
-    "(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)"
-)
+private val COERCE_REGEX = Regex("(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)")
 
 class Semver : Comparable<Semver> {
     val major: Int
