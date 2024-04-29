@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 
-class SemverInitTest : FunSpec({
+class SemverTest : FunSpec({
     listOf(
         "0.0.4" to Semver(0, 0, 4),
         "1.2.3" to Semver(1, 2, 3),
@@ -190,5 +190,20 @@ class SemverInitTest : FunSpec({
         test("isStable field for Semver [$semver] should equal $expectedIsStable") {
             semver.isStable shouldBe expectedIsStable
         }
+    }
+
+    test("Semver should allow for custom formatting") {
+        val semver = Semver(
+            major = 1,
+            minor = 2,
+            patch = 3,
+            preRelease = listOf("alpha", "beta"),
+            build = listOf("a1", "b2"),
+        )
+        val semverStr = semver.format { s ->
+            "${s.major}:${s.minor}:${s.patch}|${s.preRelease.joinToString("&")}*${s.build.joinToString("&")}"
+        }
+
+        semverStr shouldBe "1:2:3|alpha&beta*a1&b2"
     }
 })

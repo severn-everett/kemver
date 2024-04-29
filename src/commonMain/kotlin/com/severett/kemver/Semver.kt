@@ -160,6 +160,8 @@ class Semver : Comparable<Semver> {
 
     infix fun isEquivalentTo(other: String) = isEquivalentTo(Semver(other))
 
+    fun format(formatter: (Semver) -> String) = formatter.invoke(this)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Semver) return false
