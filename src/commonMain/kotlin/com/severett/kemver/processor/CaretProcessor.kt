@@ -1,12 +1,15 @@
 package com.severett.kemver.processor
 
 import com.severett.kemver.Range
-import com.severett.kemver.Tokenizers.CARET
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
 object CaretProcessor : Processor {
-    private val regex = Regex(CARET)
+    private val regex = Regex(
+        "^\\^[v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)?)?$"
+    )
 
     override fun process(range: String): String {
         val matcher = regex.matchEntire(range) ?: return range

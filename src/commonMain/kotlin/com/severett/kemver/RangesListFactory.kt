@@ -1,6 +1,5 @@
 package com.severett.kemver
 
-import com.severett.kemver.Tokenizers.COMPARATOR
 import com.severett.kemver.processor.CaretProcessor
 import com.severett.kemver.processor.GreaterThanOrEqualZeroProcessor
 import com.severett.kemver.processor.HyphenProcessor
@@ -11,7 +10,11 @@ import com.severett.kemver.processor.XRangeProcessor
 
 object RangesListFactory {
     private val splitterRegex = Regex("(\\s*)([<>]?=?)\\s*")
-    private val comparatorRegex = Regex(COMPARATOR)
+    private val comparatorRegex = Regex(
+        "^([<>]?=?)\\s*(v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)" +
+                "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)$|^$"
+    )
     private val sectionsRegex = Regex("\\|\\|")
     private val spacesRegex = Regex("\\s+")
     private val processors = RangeProcessorPipeline.build {

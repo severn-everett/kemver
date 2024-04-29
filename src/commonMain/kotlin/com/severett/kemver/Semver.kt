@@ -1,8 +1,9 @@
 package com.severett.kemver
 
-import com.severett.kemver.Tokenizers.STRICT
-
-private val STRICT_REGEX = Regex(STRICT)
+private val STRICT_REGEX = Regex(
+    "^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)" +
+            "(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+)
 private val COERCE_REGEX = Regex("(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)")
 
 class Semver : Comparable<Semver> {

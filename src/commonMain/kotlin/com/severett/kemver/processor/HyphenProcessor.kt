@@ -1,12 +1,18 @@
 package com.severett.kemver.processor
 
 import com.severett.kemver.Range
-import com.severett.kemver.Tokenizers.HYPHEN
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
 object HyphenProcessor : Processor {
-    private val regex = Regex(HYPHEN)
+    private val regex = Regex(
+        "^\\s*([v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)?)?)\\s+-\\s+([v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)?)?)\\s*$"
+    )
 
     override fun process(range: String): String {
         val matchResult = regex.matchEntire(range) ?: return range

@@ -1,7 +1,6 @@
 package com.severett.kemver.processor
 
 import com.severett.kemver.Range
-import com.severett.kemver.Tokenizers.IVY
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
@@ -10,7 +9,9 @@ object IvyProcessor : Processor {
     private const val RIGHT_BRACKET = "]"
     private const val LEFT_PARENTHESIS = "("
     private const val RIGHT_PARENTHESIS = ")"
-    private val regex = Regex(IVY)
+    private val regex = Regex(
+        "^([\\[\\](])([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?,([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?([]\\[)])$"
+    )
     private val rangeBrackets = listOf(LEFT_BRACKET, RIGHT_BRACKET)
 
     override fun process(range: String): String {

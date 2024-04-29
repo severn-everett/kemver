@@ -1,12 +1,15 @@
 package com.severett.kemver.processor
 
 import com.severett.kemver.Range
-import com.severett.kemver.Tokenizers.TILDE
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
 object TildeProcessor : Processor {
-    private val regex = Regex(TILDE)
+    private val regex = Regex(
+        "^~>?[v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)?)?$"
+    )
 
     override fun process(range: String): String {
         val matchResult = regex.matchEntire(range) ?: return range

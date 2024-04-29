@@ -1,13 +1,16 @@
 package com.severett.kemver.processor
 
 import com.severett.kemver.Range
-import com.severett.kemver.Tokenizers.XRANGE
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
 object XRangeProcessor : Processor {
     private val spaceRegex = Regex("\\s+")
-    private val xRangeRegex = Regex(XRANGE)
+    private val xRangeRegex = Regex(
+        "^([<>]?=?)\\s*[v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +
+                "(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)" +
+                "(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)?)?$"
+    )
 
     override fun process(range: String): String {
         val ranges = range.split(spaceRegex).mapNotNull { rangeVersion ->
