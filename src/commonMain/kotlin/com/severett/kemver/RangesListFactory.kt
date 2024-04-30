@@ -4,7 +4,6 @@ import com.severett.kemver.processor.CaretProcessor
 import com.severett.kemver.processor.GreaterThanOrEqualZeroProcessor
 import com.severett.kemver.processor.HyphenProcessor
 import com.severett.kemver.processor.IvyProcessor
-import com.severett.kemver.processor.RangeProcessorPipeline
 import com.severett.kemver.processor.TildeProcessor
 import com.severett.kemver.processor.XRangeProcessor
 
@@ -17,14 +16,14 @@ object RangesListFactory {
     )
     private val sectionsRegex = Regex("\\|\\|")
     private val spacesRegex = Regex("\\s+")
-    private val processors = RangeProcessorPipeline.build {
-        addProcessor(GreaterThanOrEqualZeroProcessor)
-        addProcessor(IvyProcessor)
-        addProcessor(HyphenProcessor)
-        addProcessor(CaretProcessor)
-        addProcessor(TildeProcessor)
-        addProcessor(XRangeProcessor)
-    }
+    private val processors = listOf(
+        GreaterThanOrEqualZeroProcessor,
+        IvyProcessor,
+        HyphenProcessor,
+        CaretProcessor,
+        TildeProcessor,
+        XRangeProcessor,
+    )
 
     fun create(rangesExpression: RangesExpression) = rangesExpression.get()
 
@@ -35,7 +34,9 @@ object RangesListFactory {
                 val trimmedRangeSection = splitterRegex.replace(rangeSection) {
                     "${it.groupValues[1]}${it.groupValues[2]}"
                 }.trim()
-                val processedRangesSection = processors.process(trimmedRangeSection)
+                val processedRangesSection = processors.fold(trimmedRangeSection) { acc, processor ->
+                    processor.process(acc)
+                }
                 createRanges(processedRangesSection)
             }
         return RangesList(rangesList)
