@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform") version "1.9.23"
+    id("io.kotest.multiplatform") version "5.8.1"
 }
 
 group = "com.severett"
@@ -24,6 +25,16 @@ kotlin {
     }
 
     jvm()
+    js(IR) {
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
+        nodejs()
+    }
 
     sourceSets {
         val kotestVersion: String by project
@@ -38,7 +49,6 @@ kotlin {
                 implementation("io.kotest:kotest-property:$kotestVersion")
             }
         }
-
 
         val jvmTest by getting {
             dependencies {

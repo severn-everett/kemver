@@ -9,8 +9,11 @@ object IvyProcessor : Processor {
     private const val RIGHT_BRACKET = "]"
     private const val LEFT_PARENTHESIS = "("
     private const val RIGHT_PARENTHESIS = ")"
+    // Need to escape the final right square bracket due to it being an illegal
+    // character in the unicode-enabled Regex object on the JS platform
+    @Suppress("RegExpRedundantEscape")
     private val regex = Regex(
-        "^([\\[\\](])([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?,([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?([]\\[)])$"
+        "^([\\[\\](])([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?,([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?([\\]\\[)])$"
     )
     private val rangeBrackets = listOf(LEFT_BRACKET, RIGHT_BRACKET)
 

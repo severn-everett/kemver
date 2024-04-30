@@ -1,5 +1,7 @@
 package com.severett.kemver
 
+import kotlin.jvm.JvmStatic
+
 class RangesExpression internal constructor(range: Range) {
     private val rangesList = RangesList()
     private val andOperationRanges = mutableListOf(range)

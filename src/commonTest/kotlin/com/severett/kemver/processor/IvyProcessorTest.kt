@@ -3,7 +3,7 @@ package com.severett.kemver.processor
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-object IvyProcessorTest : FunSpec({
+class IvyProcessorTest : FunSpec({
     listOf(
         "[1.2.3,2.3.4]" to ">=1.2.3 <=2.3.4",
         "[1.2,2.3.4]" to ">=1.2.0 <=2.3.4",
