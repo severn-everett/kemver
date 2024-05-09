@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform") version "1.9.23"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("io.kotest.multiplatform") version "5.8.1"
 }
 
