@@ -1,5 +1,6 @@
 package com.severett.kemver
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -12,7 +13,7 @@ class ModifierTest : FunSpec({
         Semver("1.0.1-1") to Semver(2, 0, 0),
         Semver("1.0.0-1") to Semver(1, 0, 0),
     ).forEach { (semver, expectedSemver) ->
-        test("Invoking nextMajor() on Semver [$semver] should result in Semver [$expectedSemver]") {
+        test("Invoking nextMajor() on Semver [$semver] should result in Semver [$expectedSemver]".stripDots()) {
             semver.nextMajor() shouldBe expectedSemver
         }
     }
@@ -29,7 +30,7 @@ class ModifierTest : FunSpec({
             expectedSemver = Semver(3, 0, 0)
         ),
     ).forEach { (title, callback, expectedSemver) ->
-        test(title) {
+        test(title.stripDots()) {
             callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
         }
     }
@@ -39,7 +40,7 @@ class ModifierTest : FunSpec({
         Semver("1.0.1-1") to Semver(1, 1, 0),
         Semver("1.0.0-1") to Semver(1, 0, 0),
     ).forEach { (semver, expectedSemver) ->
-        test("Invoking nextMinor() on Semver [$semver] should result in Semver [$expectedSemver]") {
+        test("Invoking nextMinor() on Semver [$semver] should result in Semver [$expectedSemver]".stripDots()) {
             semver.nextMinor() shouldBe expectedSemver
         }
     }
@@ -56,7 +57,7 @@ class ModifierTest : FunSpec({
             expectedSemver = Semver(1, 2, 0)
         ),
     ).forEach { (title, callback, expectedSemver) ->
-        test(title) {
+        test(title.stripDots()) {
             callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
         }
     }
@@ -65,7 +66,7 @@ class ModifierTest : FunSpec({
         Semver("1.0.0") to Semver(1, 0, 1),
         Semver("1.0.0-1") to Semver(1, 0, 0),
     ).forEach { (semver, expectedSemver) ->
-        test("Invoking nextPatch on Semver [$semver] should result in Semver [$expectedSemver]") {
+        test("Invoking nextPatch on Semver [$semver] should result in Semver [$expectedSemver]".stripDots()) {
             semver.nextPatch() shouldBe expectedSemver
         }
     }
@@ -82,7 +83,7 @@ class ModifierTest : FunSpec({
             expectedSemver = Semver(1, 0, 2)
         ),
     ).forEach { (title, callback, expectedSemver) ->
-        test(title) {
+        test(title.stripDots()) {
             callback.invoke(Semver("1.0.0")) shouldBe expectedSemver
         }
     }
@@ -91,7 +92,7 @@ class ModifierTest : FunSpec({
         "withPreRelease() should work with a string" to { semver: Semver -> semver.withPreRelease("alpha.beta") },
         "withPreRelease() should work with a list" to { semver: Semver -> semver.withPreRelease(listOf("alpha", "beta")) },
     ).forEach { (title, callback) ->
-        test(title) {
+        test(title.stripDots()) {
             callback(Semver("1.0.0")) shouldBe Semver(1, 0, 0, preRelease = listOf("alpha", "beta"))
         }
     }
@@ -100,20 +101,20 @@ class ModifierTest : FunSpec({
         "withBuild() should work with a string" to { semver: Semver -> semver.withBuild("alpha.beta") },
         "withBuild() should work with a list" to { semver: Semver -> semver.withBuild(listOf("alpha", "beta")) },
     ).forEach { (title, callback) ->
-        test(title) {
+        test(title.stripDots()) {
             callback(Semver("1.0.0")) shouldBe Semver(1, 0, 0, build = listOf("alpha", "beta"))
         }
     }
 
-    test("Semver should be able to clear prerelease") {
+    test("Semver should be able to clear prerelease".stripDots()) {
         Semver("1.0.0-alpha.beta").withClearedPreRelease() shouldBe Semver(1, 0, 0)
     }
 
-    test("Semver should be able to clear build") {
+    test("Semver should be able to clear build".stripDots()) {
         Semver("1.0.0+alpha.beta").withClearedBuild() shouldBe Semver(1, 0, 0)
     }
 
-    test("Semver should be able to clear prerelease and build") {
+    test("Semver should be able to clear prerelease and build".stripDots()) {
         Semver("1.0.0-alpha.beta+alpha.beta").withClearedPreReleaseAndBuild() shouldBe Semver(1, 0, 0)
     }
 })

@@ -5,6 +5,7 @@ import com.severett.kemver.RangesExpression.Companion.greater
 import com.severett.kemver.RangesExpression.Companion.greaterOrEqual
 import com.severett.kemver.RangesExpression.Companion.less
 import com.severett.kemver.RangesExpression.Companion.lessOrEqual
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -19,13 +20,13 @@ class RangesExpressionTest : FunSpec({
         ExpressionArgs("Less Or Equal", RangesExpression::lessOrEqual, "<=1.0.0"),
     ).forEach { (type, expression, expectedStr) ->
         val version = "1.0.0"
-        test("An expression \"$type\" for version $version should produce RangesExpression [$expectedStr]") {
+        test("An expression \"$type\" for version $version should produce RangesExpression [$expectedStr]".stripDots()) {
             val rangesExpression = expression.invoke(version)
             rangesExpression.get().toString() shouldBe expectedStr
         }
     }
 
-    test("A complex range expression should be built") {
+    test("A complex range expression should be built".stripDots()) {
         val rangeExpressions = equal("1.0.0")
             .and(
                 equal("2.0.0")
@@ -39,7 +40,7 @@ class RangesExpressionTest : FunSpec({
         rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
     }
 
-    test("A complex range expression should be built using lambdas") {
+    test("A complex range expression should be built using lambdas".stripDots()) {
         val rangeExpressions = equal("1.0.0") {
             and {
                 equal("2.0.0") {

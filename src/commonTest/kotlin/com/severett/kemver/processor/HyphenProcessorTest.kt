@@ -1,5 +1,6 @@
 package com.severett.kemver.processor
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -12,7 +13,7 @@ class HyphenProcessorTest : FunSpec({
         "1.2.3 - 2" to ">=1.2.3 <3.0.0",
         "OTHER" to "OTHER",
     ).forEach { (range, expectedStr) ->
-        test("Processing hyphen expression [$range] should produce string [$expectedStr]") {
+        test("Processing hyphen expression [$range] should produce string [$expectedStr]".stripDots()) {
             HyphenProcessor.process(range) shouldBe expectedStr
         }
     }

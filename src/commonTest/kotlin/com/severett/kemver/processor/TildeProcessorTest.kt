@@ -1,5 +1,6 @@
 package com.severett.kemver.processor
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -11,7 +12,7 @@ class TildeProcessorTest : FunSpec({
         "~1.2.3-alpha" to ">=1.2.3-alpha <1.3.0",
         "OTHER" to "OTHER",
     ).forEach { (range, expectedStr) ->
-        test("Processing tilde expression [$range] should produce string [$expectedStr]") {
+        test("Processing tilde expression [$range] should produce string [$expectedStr]".stripDots()) {
             TildeProcessor.process(range) shouldBe expectedStr
         }
     }

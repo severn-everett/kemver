@@ -1,5 +1,6 @@
 package com.severett.kemver
 
+import com.severett.kemver.util.stripDots
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -19,7 +20,7 @@ class SemverTest : FunSpec({
         "1.0.0+alpha-beta" to Semver(1, 0, 0, build = listOf("alpha-beta")),
         "1.0.0+alpha.beta" to Semver(1, 0, 0, build = listOf("alpha", "beta")),
     ).forEach { (input, expected) ->
-        test("[$input] should be equal to $expected") {
+        test("[$input] should be equal to $expected".stripDots()) {
             Semver(input) shouldBeEqual expected
         }
     }
@@ -65,7 +66,7 @@ class SemverTest : FunSpec({
         "99999999999999999999999.999999999999999999.99999999999999999----RC-SNAPSHOT.12.09.1--------------------------------..12",
         "1.1.1.1",
     ).forEach { invalid ->
-        test("Parsing invalid string [$invalid] should throw an exception") {
+        test("Parsing invalid string [$invalid] should throw an exception".stripDots()) {
             val thrownException = shouldThrow<SemverException> {
                 Semver(invalid)
             }
@@ -97,18 +98,18 @@ class SemverTest : FunSpec({
             expectedMessage = "Patch [-1] should be >= 0"
         ),
     ).forEach { (title, semverInit, expectedMessage) ->
-        test(title) {
+        test(title.stripDots()) {
             val thrownException = shouldThrow<SemverException>(semverInit)
             thrownException.message shouldBe expectedMessage
         }
     }
 
-    test("It should parse a valid version string successfully") {
+    test("It should parse a valid version string successfully".stripDots()) {
         Semver.parse("1.0.0") shouldBe Semver(1, 0, 0)
     }
 
     listOf("INVALID", null).forEach { invalid ->
-        test("It should return null when parsing an invalid version string of [$invalid]") {
+        test("It should return null when parsing an invalid version string of [$invalid]".stripDots()) {
             Semver.parse(invalid) shouldBe null
         }
     }
@@ -117,7 +118,7 @@ class SemverTest : FunSpec({
         "1.0.0" to true,
         "INVALID" to false,
     ).forEach { (versionStr, expectedResult) ->
-        test("It should return $expectedResult when determining validity of [$versionStr]") {
+        test("It should return $expectedResult when determining validity of [$versionStr]".stripDots()) {
             Semver.isValid(versionStr) shouldBe expectedResult
         }
     }
@@ -177,7 +178,7 @@ class SemverTest : FunSpec({
         null to null,
         "INVALID" to null,
     ).forEach { (versionStr, expectedResult) ->
-        test("It should coerce [$versionStr] to Semver [$expectedResult]") {
+        test("It should coerce [$versionStr] to Semver [$expectedResult]".stripDots()) {
             Semver.coerce(versionStr) shouldBe expectedResult
         }
     }
@@ -187,12 +188,12 @@ class SemverTest : FunSpec({
         Semver(0, 1, 0) to false,
         Semver(1, 0, 0, preRelease = listOf("PRE_RELEASE")) to false,
     ).forEach { (semver, expectedIsStable) ->
-        test("isStable field for Semver [$semver] should equal $expectedIsStable") {
+        test("isStable field for Semver [$semver] should equal $expectedIsStable".stripDots()) {
             semver.isStable shouldBe expectedIsStable
         }
     }
 
-    test("Semver should allow for custom formatting") {
+    test("Semver should allow for custom formatting".stripDots()) {
         val semver = Semver(
             major = 1,
             minor = 2,

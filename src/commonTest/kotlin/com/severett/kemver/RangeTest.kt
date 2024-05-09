@@ -1,5 +1,6 @@
 package com.severett.kemver
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -9,7 +10,7 @@ class RangeTest : FunSpec({
         Range(Semver(major = 0, minor = 0, patch = 1), Range.RangeOperator.GTE) to false,
         Range(Semver.ZERO, Range.RangeOperator.GT) to false,
     ).forEach { (range, expectedResult) ->
-        test("satisfiedByAny for Range [$range] should evaluate to $expectedResult") {
+        test("satisfiedByAny for Range [$range] should evaluate to $expectedResult".stripDots()) {
             range.isSatisfiedByAny shouldBe expectedResult
         }
     }
@@ -25,7 +26,7 @@ class RangeTest : FunSpec({
         EqualsArguments("1.2.3-alpha", "1.2.3-beta", false),
     ).forEach { (rangeVersion, version, expectedResult) ->
         val range = Range(rangeVersion, Range.RangeOperator.EQ)
-        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult") {
+        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
              range isSatisfiedBy version shouldBe expectedResult
         }
     }
@@ -36,7 +37,7 @@ class RangeTest : FunSpec({
         "1.2.2" to true,
     ).forEach { (version, expectedResult) ->
         val range = Range("1.2.3", Range.RangeOperator.LT)
-        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult") {
+        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
             range isSatisfiedBy version shouldBe expectedResult
         }
     }
@@ -47,7 +48,7 @@ class RangeTest : FunSpec({
         "1.2.2" to true,
     ).forEach { (version, expectedResult) ->
         val range = Range("1.2.3", Range.RangeOperator.LTE)
-        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult") {
+        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
             range isSatisfiedBy version shouldBe expectedResult
         }
     }
@@ -58,7 +59,7 @@ class RangeTest : FunSpec({
         "1.2.2" to false,
     ).forEach { (version, expectedResult) ->
         val range = Range("1.2.3", Range.RangeOperator.GT)
-        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult") {
+        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
             range isSatisfiedBy version shouldBe expectedResult
         }
     }
@@ -69,7 +70,7 @@ class RangeTest : FunSpec({
         "1.2.2" to false,
     ).forEach { (version, expectedResult) ->
         val range = Range("1.2.3", Range.RangeOperator.GTE)
-        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult") {
+        test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
             range isSatisfiedBy version shouldBe expectedResult
         }
     }
@@ -81,7 +82,7 @@ class RangeTest : FunSpec({
         Range.RangeOperator.GT to ">1.2.3",
         Range.RangeOperator.GTE to ">=1.2.3",
     ).forEach { (rangeOperator, expectedResult) ->
-        test("toString() should properly display RangeOperator [$rangeOperator]") {
+        test("toString() should properly display RangeOperator [$rangeOperator]".stripDots()) {
             val range = Range("1.2.3", rangeOperator)
             range.toString() shouldBe expectedResult
         }

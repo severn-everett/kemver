@@ -1,5 +1,6 @@
 package com.severett.kemver.processor
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -17,7 +18,7 @@ class XRangeProcessorTest : FunSpec({
         ">=1.2.3 <2.0.0" to ">=1.2.3 <2.0.0",
         "OTHER" to "OTHER",
     ).forEach { (range, expectedStr) ->
-        test("Processing x-range expression [$range] should produce string [$expectedStr]") {
+        test("Processing x-range expression [$range] should produce string [$expectedStr]".stripDots()) {
             XRangeProcessor.process(range) shouldBe expectedStr
         }
     }

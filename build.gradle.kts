@@ -36,6 +36,15 @@ kotlin {
         nodejs()
     }
 
+    // Linux
+    linuxArm64()
+    linuxX64()
+    mingwX64()
+    // androidNativeX64()
+    // androidNativeX86()
+    // androidNativeArm64()
+    // androidNativeArm32()
+
     sourceSets {
         val kotestVersion: String by project
 
@@ -75,7 +84,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = JvmTarget.JVM_1_8.target
     }
-    withType<Test> {
+    named<Test>("jvmTest") {
         useJUnitPlatform()
         testLogging {
             showStandardStreams = true

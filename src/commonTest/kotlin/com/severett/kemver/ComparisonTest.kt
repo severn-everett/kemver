@@ -1,11 +1,10 @@
 package com.severett.kemver
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
-
-private data class ComparisonArgs(val semver: Semver, val otherSemver: Semver, val expectedResult: Boolean)
 
 private val SEMVER_PAIRS = listOf(
     Semver("2.0.0") to Semver("1.0.0"),
@@ -49,36 +48,36 @@ class ComparisonTest : FunSpec({
     }
 
     SEMVER_PAIRS.forEach { (semver, otherSemver) ->
-        test("Semver [$semver] should be greater than Semver [$otherSemver]") {
+        test("Semver [$semver] should be greater than Semver [$otherSemver]".stripDots()) {
             (semver isGreaterThan otherSemver).shouldBeTrue()
         }
 
-        test("Semver [$semver] should be greater than or equal to Semver [$otherSemver]") {
+        test("Semver [$semver] should be greater than or equal to Semver [$otherSemver]".stripDots()) {
             (semver isGreaterThanOrEqualTo otherSemver).shouldBeTrue()
         }
 
-        test("Semver [$semver] should not be lower than or equal to Semver [$otherSemver]") {
+        test("Semver [$semver] should not be lower than or equal to Semver [$otherSemver]".stripDots()) {
             (semver isLowerThanOrEqualTo otherSemver).shouldBeFalse()
         }
 
-        test("Semver [$semver] should not be lower than Semver [$otherSemver]") {
+        test("Semver [$semver] should not be lower than Semver [$otherSemver]".stripDots()) {
             (semver isLowerThan otherSemver).shouldBeFalse()
         }
     }
 
-    test("Semver [1.0.0-alpha.1] should be greater than string [1.0.0-alpha]") {
+    test("Semver [1.0.0-alpha.1] should be greater than string [1.0.0-alpha]".stripDots()) {
         (Semver("1.0.0-alpha.1") isGreaterThan "1.0.0-alpha").shouldBeTrue()
     }
 
-    test("Semver [1.0.0-alpha.1] should be greater than or equal to string [1.0.0-alpha]") {
+    test("Semver [1.0.0-alpha.1] should be greater than or equal to string [1.0.0-alpha]".stripDots()) {
         (Semver("1.0.0-alpha.1") isGreaterThanOrEqualTo "1.0.0-alpha").shouldBeTrue()
     }
 
-    test("Semver [1.0.0-alpha.1] should not be be lower than or equal to string [1.0.0-alpha]") {
+    test("Semver [1.0.0-alpha.1] should not be be lower than or equal to string [1.0.0-alpha]".stripDots()) {
         (Semver("1.0.0-alpha.1") isLowerThanOrEqualTo "1.0.0-alpha").shouldBeFalse()
     }
 
-    test("Semver [1.0.0-alpha.1] should not be lower than string [1.0.0-alpha]") {
+    test("Semver [1.0.0-alpha.1] should not be lower than string [1.0.0-alpha]".stripDots()) {
         (Semver("1.0.0-alpha.1") isLowerThan "1.0.0-alpha").shouldBeFalse()
     }
 
@@ -86,7 +85,7 @@ class ComparisonTest : FunSpec({
         Semver("1.0.0+alpha") to Semver("1.0.0"),
         Semver("1.0.0+alpha") to Semver("1.0.0+beta"),
     ).forEach { (semver, otherSemver) ->
-        test("Semver [$semver] should be equivalent to Semver [$otherSemver]") {
+        test("Semver [$semver] should be equivalent to Semver [$otherSemver]".stripDots()) {
             (semver isEquivalentTo otherSemver).shouldBeTrue()
         }
     }
@@ -95,20 +94,20 @@ class ComparisonTest : FunSpec({
         Semver("1.0.0-alpha") to Semver("1.0.0"),
         Semver("1.0.0-alpha") to Semver("1.0.0-beta"),
     ).forEach { (semver, otherSemver) ->
-        test("Semver [$semver] should not be equivalent to Semver [$otherSemver]") {
+        test("Semver [$semver] should not be equivalent to Semver [$otherSemver]".stripDots()) {
             (semver isEquivalentTo otherSemver).shouldBeFalse()
         }
     }
 
-    test("Semver [1.0.0+alpha] should be equivalent to string [1.0.0]") {
+    test("Semver [1.0.0+alpha] should be equivalent to string [1.0.0]".stripDots()) {
         (Semver("1.0.0+alpha") isEquivalentTo "1.0.0").shouldBeTrue()
     }
 
-    test("Semver [1.0.0+alpha] should be equal to string [1.0.0+alpha]") {
+    test("Semver [1.0.0+alpha] should be equal to string [1.0.0+alpha]".stripDots()) {
         (Semver("1.0.0+alpha") isEqualTo  "1.0.0+alpha").shouldBeTrue()
     }
 
-    test("Semver [1.0.0+alpha] should not be equal to Semver [1.0.0+beta]") {
+    test("Semver [1.0.0+alpha] should not be equal to Semver [1.0.0+beta]".stripDots()) {
         (Semver("1.0.0+alpha") isEqualTo Semver("1.0.0+beta")).shouldBeFalse()
     }
 })

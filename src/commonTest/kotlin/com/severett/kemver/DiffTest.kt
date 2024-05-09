@@ -1,5 +1,6 @@
 package com.severett.kemver
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -34,12 +35,12 @@ class DiffTest : FunSpec({
         createSemver(build = emptyList()) to Semver.VersionDiff.BUILD,
         createSemver() to Semver.VersionDiff.NONE,
     ).forEach { (otherSemver, expectedDiff) ->
-        test("Comparing Semver [$otherSemver] to Semver [$baseSemver] should return a diff of [$expectedDiff]") {
+        test("Comparing Semver [$otherSemver] to Semver [$baseSemver] should return a diff of [$expectedDiff]".stripDots()) {
             baseSemver.diff(otherSemver) shouldBe expectedDiff
         }
     }
 
-    test("Comparing string [2.2.3] to Semver [$baseSemver] should return a diff of [${Semver.VersionDiff.MAJOR}") {
+    test("Comparing string [2.2.3] to Semver [$baseSemver] should return a diff of [${Semver.VersionDiff.MAJOR}".stripDots()) {
         baseSemver.diff("2.2.3") shouldBe Semver.VersionDiff.MAJOR
     }
 
@@ -50,12 +51,12 @@ class DiffTest : FunSpec({
         createSemver(preRelease = emptyList()) to true,
         createSemver(build = emptyList()) to true,
     ).forEach { (otherSemver, expectedResult) ->
-        test("Comparing API compatibility of Semver [$otherSemver] to Semver [$baseSemver] should produce $expectedResult") {
+        test("Comparing API compatibility of Semver [$otherSemver] to Semver [$baseSemver] should produce $expectedResult".stripDots()) {
             baseSemver.isApiCompatible(otherSemver) shouldBe expectedResult
         }
     }
 
-    test("Comparing API compatibility of string [2.2.3] to Semver [$baseSemver] should produce false") {
+    test("Comparing API compatibility of string [2.2.3] to Semver [$baseSemver] should produce false".stripDots()) {
         baseSemver.isApiCompatible("2.2.3") shouldBe false
     }
 })

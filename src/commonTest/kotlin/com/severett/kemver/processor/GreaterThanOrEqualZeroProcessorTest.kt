@@ -1,5 +1,6 @@
 package com.severett.kemver.processor
 
+import com.severett.kemver.util.stripDots
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
@@ -13,7 +14,7 @@ class GreaterThanOrEqualZeroProcessorTest : FunSpec({
         "*" to ALL_RANGE_STR,
         "OTHER" to "OTHER"
     ).forEach { (range, expectedStr) ->
-        test("Processing expression [$range] should produce string [$expectedStr]") {
+        test("Processing expression [$range] should produce string [$expectedStr]".stripDots()) {
             GreaterThanOrEqualZeroProcessor.process(range) shouldBe expectedStr
         }
     }
