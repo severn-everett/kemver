@@ -4,6 +4,14 @@ import com.severett.kemver.Range
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
+/**
+ * Processor for translating [caret ranges](https://github.com/npm/node-semver#caret-ranges-123-025-004)
+ * into a classic range.
+ *
+ * Translates:
+ * * `^1.2.3` to `>=1.2.3 <2.0.0`
+ * * `^0.2.3` to `>=0.2.3 <0.3.0`
+ */
 object CaretProcessor : Processor {
     private val regex = Regex(
         "^\\^[v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +

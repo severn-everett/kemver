@@ -4,6 +4,18 @@ import com.severett.kemver.Range
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
+/**
+ * Processor for translating [tilde ranges](https://github.com/npm/node-semver#tilde-ranges-123-12-1)
+ * into a classic range.
+ *
+ * Translates:
+ * * `~1.2.3` to `>=1.2.3 <1.3.0`
+ * * `~1.2` to `>=1.2.0 <1.3.0`
+ * * `~1` to `>=1.0.0 <2.0.0`
+ * * `~0.2.3` to `>=0.2.3 <0.3.0`
+ * * `~0.2` to `>=0.2.0 <0.3.0`
+ * * `~0` to `>=0.0.0 <1.0.0`
+ */
 object TildeProcessor : Processor {
     private val regex = Regex(
         "^~>?[v=\\s]*(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)(?:\\.(0|[1-9]\\d*|x|X|\\*|\\+)" +

@@ -1,5 +1,8 @@
 package com.severett.kemver.processor
 
+/**
+ * Set of methods which help range handling.
+ */
 internal object RangesUtils {
     private const val X_RANGE_MARKER = -1
     private const val X_CHAR = "x"

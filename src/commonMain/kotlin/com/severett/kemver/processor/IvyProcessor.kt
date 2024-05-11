@@ -4,6 +4,21 @@ import com.severett.kemver.Range
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
+/**
+ * Processor for translating [Ivy ranges](https://ant.apache.org/ivy/history/latest-milestone/settings/version-matchers.html)
+ * into a classic range.
+ *
+ * Translates:
+ * * `[1.0,2.0]` to `>=1.0.0 <=2.0.0`
+ * * `[1.2,2.0[` to `>=1.0.0 <2.0.0`
+ * * `]1.0,2.0]` to `>1.0.0 <=2.0.0`
+ * * `]1.0,2.0[` to `>1.0.0 <2.0.0`
+ * * `]1.0.1,2.0.1[` to `>1.0.1 <2.0.1`
+ * * `[1.0,)` to `>=1.0.0`
+ * * `]1.0,)` to `>1.0.0`
+ * * `(,2.0]` to `<=2.0.0`
+ * * `(,2.0[` to `<2.0.0`
+ */
 object IvyProcessor : Processor {
     private const val LEFT_BRACKET = "["
     private const val RIGHT_BRACKET = "]"

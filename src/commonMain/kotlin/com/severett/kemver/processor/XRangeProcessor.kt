@@ -4,6 +4,20 @@ import com.severett.kemver.Range
 import com.severett.kemver.processor.RangesUtils.isX
 import com.severett.kemver.processor.RangesUtils.parseIntWithXSupport
 
+/**
+ * Processor for translating [X-Ranges](https://github.com/npm/node-semver#x-ranges-12x-1x-12-) into classic ranges.
+ *
+ * Translates:
+ * * `>1.X.X` to `>=2.0.0`
+ * * `>1.2.X` to `>=1.3.0`
+ * * `<=1.X.X` to `<2.0.0`
+ * * `<=1.2.X` to `<1.3.0`
+ * * `>=1.X.X` to `>=1.0.0`
+ * * `>=1.2.X` to `>=1.2.0`
+ * * `1.X` to `>=1.0.0 <2.0.0`
+ * * `1.2.X` to `>=1.2.0 <1.3.0`
+ * * `=1.2.X` to `>=1.2.0 <1.3.0`
+ */
 object XRangeProcessor : Processor {
     private val spaceRegex = Regex("\\s+")
     private val xRangeRegex = Regex(
