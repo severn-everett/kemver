@@ -7,6 +7,9 @@ import com.severett.kemver.processor.IvyProcessor
 import com.severett.kemver.processor.TildeProcessor
 import com.severett.kemver.processor.XRangeProcessor
 
+/**
+ * Object for creating a [RangesList] object.
+ */
 object RangesListFactory {
     private val splitterRegex = Regex("(\\s*)([<>]?=?)\\s*")
     private val comparatorRegex = Regex(
