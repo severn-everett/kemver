@@ -355,6 +355,21 @@ class Semver : Comparable<Semver> {
     infix fun isEquivalentTo(other: String) = isEquivalentTo(Semver(other))
 
     /**
+     * Check for whether the version satisfies a range string.
+     */
+    infix fun satisfies(range: String) = satisfies(RangesListFactory.create(range))
+
+    /**
+     * Check for whether the version satisfies a range expression.
+     */
+    infix fun satisfies(rangesExpression: RangesExpression) = satisfies(RangesListFactory.create(rangesExpression))
+
+    /**
+     * Check for whether the version satisfies a ranges list.
+     */
+    infix fun satisfies(rangesList: RangesList) = rangesList.isSatisfiedBy(this)
+
+    /**
      * Format into a string using custom formatting rules.
      */
     fun format(formatter: (Semver) -> String) = formatter.invoke(this)

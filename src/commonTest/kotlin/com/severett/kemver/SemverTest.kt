@@ -207,4 +207,140 @@ class SemverTest : FunSpec({
 
         semverStr shouldBe "1:2:3|alpha&beta*a1&b2"
     }
+
+    data class SatisfiesStrArgs(val version: String = "1.2.3", val rangeStr: String, val expectedSatisfies: Boolean)
+
+    listOf(
+        // Fully-qualified versions
+        SatisfiesStrArgs(rangeStr = "1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2.4", expectedSatisfies = false),
+        SatisfiesStrArgs(
+            version = "1.0.0-setup-20220428123901",
+            rangeStr = "1.0.0-setup-20220428123901",
+            expectedSatisfies = true,
+        ),
+        // Minor versions
+        SatisfiesStrArgs(rangeStr = "1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.3", expectedSatisfies = false),
+        // Major versions
+        SatisfiesStrArgs(rangeStr = "1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "2", expectedSatisfies = false),
+        // Hyphen ranges
+        SatisfiesStrArgs(rangeStr = "1.2.3 - 2.3.4", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.0.0 - 2.0.0", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.0.0 - 1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(version = "1.2.3-alpha", rangeStr = "1.2.3 - 2.3.4", expectedSatisfies = false),
+        SatisfiesStrArgs(version = "1.2.3-alpha", rangeStr = "1.0.0 - 1.2.3-beta", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1.2.X", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1.X", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1.0.0", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "0.0.0 - 1.0.0", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "2 - 2.3.4", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "1.3 - 2.3.4", expectedSatisfies = false),
+        // Wildcard ranges
+        SatisfiesStrArgs(rangeStr = "", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "*", expectedSatisfies = true),
+        SatisfiesStrArgs(version = "1.2.3-alpha", rangeStr = "*", expectedSatisfies = false),
+        SatisfiesStrArgs(version = "1.2.3-alpha", rangeStr = "1.2.X", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "1.2.X", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2.*", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.X", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.*", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.3.X", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "1.3.*", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "2.X", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "2.*", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "1.2.+", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.+", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.3.+", expectedSatisfies = false),
+        // Tilde ranges
+        SatisfiesStrArgs(rangeStr = "~1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "~1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "~1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "~1.1.3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "~1.1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "~2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "~> 1.2.2 ", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "~> 1.2.4 ", expectedSatisfies = false),
+        SatisfiesStrArgs(version = "1.2.3-beta", rangeStr = "~1.2.3-alpha", expectedSatisfies = true),
+        // Caret ranges:
+        SatisfiesStrArgs(rangeStr = "^1.1.1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "^1.1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "^1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "^0.1.1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "^0.1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "^0", expectedSatisfies = false),
+        // Comparators:
+        SatisfiesStrArgs(rangeStr = "=1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "=1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "=1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "=1.2.4", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "=1.3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "=2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">1.2.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">1.1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">0", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">1.2.3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">1.2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">=1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">=1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">=1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">=1.2.4", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">=1.3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">=2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<1.2.4", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<1.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<1.2.3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<1.2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<=1.2.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<=1.2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<=1", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "<=1.2.2", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<=1.1", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "<=0", expectedSatisfies = false),
+        // AND ranges:
+        SatisfiesStrArgs(rangeStr = ">1.0.0 <2.0.0", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">1.0 <2.0", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">0 <2", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = ">1 <3", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "1.2 <1.2.4", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2 <1.2.3", expectedSatisfies = false),
+        // OR ranges:
+        SatisfiesStrArgs(rangeStr = "1.2.3 || 1.2.4", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2.2 || 1.2.4", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = ">1.1 <1.3 || 1.2.4", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2.4 || >1.1 <1.3", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "1.2.0 - 1.2.2 || 1.2.4 - 2.0.0", expectedSatisfies = false),
+        // Ivy ranges:
+        SatisfiesStrArgs(rangeStr = "[1.0,2.0]", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "[1.0,2.0[", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "]1.0,2.0]", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "]1.0,2.0[", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "[1.2.4,2.0]", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "]1.2.3,2.0]", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "[1.2.4,)", expectedSatisfies = false),
+        SatisfiesStrArgs(rangeStr = "latest", expectedSatisfies = true),
+        SatisfiesStrArgs(rangeStr = "latest.integration", expectedSatisfies = true),
+    ).forEach { (version, rangeStr, expectedSatisfies) ->
+        test(
+            "Semver [$version] should return $expectedSatisfies on a satisfy check against string [$rangeStr]"
+                .stripDots()
+        ) {
+            Semver(version) satisfies rangeStr shouldBe expectedSatisfies
+        }
+    }
+
+    test("Semver [1.2.3] should check satisfaction on range expression") {
+        Semver("1.2.3") satisfies RangesExpression.greaterOrEqual("1.0.0") shouldBe true
+    }
+
+    test("Semver [1.2.3] should check satisfaction on ranges list") {
+        val rangesList = RangesList(listOf(listOf(Range("1.0.0", Range.RangeOperator.GT))))
+        Semver("1.2.3") satisfies rangesList shouldBe true
+    }
 })
