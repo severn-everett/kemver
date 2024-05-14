@@ -22,12 +22,12 @@ class ModifierTest : FunSpec({
         WithCallbackTest(
             title = "Semver should be able to increment major with a default value",
             callback = Semver::withIncMajor,
-            expectedSemver = Semver(2, 0, 0)
+            expectedSemver = Semver(2, 0, 0),
         ),
         WithCallbackTest(
             title = "Semver should be able to increment major with a specified value",
             callback = { s -> s.withIncMajor(2) },
-            expectedSemver = Semver(3, 0, 0)
+            expectedSemver = Semver(3, 0, 0),
         ),
     ).forEach { (title, callback, expectedSemver) ->
         test(title.stripDots()) {
@@ -49,12 +49,12 @@ class ModifierTest : FunSpec({
         WithCallbackTest(
             title = "Semver should be able to increment minor with a default value",
             callback = Semver::withIncMinor,
-            expectedSemver = Semver(1, 1, 0)
+            expectedSemver = Semver(1, 1, 0),
         ),
         WithCallbackTest(
             title = "Semver should be able to increment minor with a specified value",
             callback = { s -> s.withIncMinor(2) },
-            expectedSemver = Semver(1, 2, 0)
+            expectedSemver = Semver(1, 2, 0),
         ),
     ).forEach { (title, callback, expectedSemver) ->
         test(title.stripDots()) {
@@ -75,12 +75,12 @@ class ModifierTest : FunSpec({
         WithCallbackTest(
             title = "Semver should be able to increment patch with a default value",
             callback = Semver::withIncPatch,
-            expectedSemver = Semver(1, 0, 1)
+            expectedSemver = Semver(1, 0, 1),
         ),
         WithCallbackTest(
             title = "Semver should be able to increment patch with a specified value",
             callback = { s -> s.withIncPatch(2) },
-            expectedSemver = Semver(1, 0, 2)
+            expectedSemver = Semver(1, 0, 2),
         ),
     ).forEach { (title, callback, expectedSemver) ->
         test(title.stripDots()) {

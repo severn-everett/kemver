@@ -2,10 +2,11 @@ package com.severett.kemver
 
 import kotlin.jvm.JvmStatic
 
-private val STRICT_REGEX = Regex(
-    "^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)" +
-            "(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
-)
+private val STRICT_REGEX =
+    Regex(
+        "^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)" +
+            "(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$",
+    )
 private val COERCE_REGEX = Regex("(^|\\D)(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:\$|\\D)")
 
 /**
@@ -77,8 +78,8 @@ class Semver : Comparable<Semver> {
     }
 
     constructor(versionStr: String) {
-        val matchResult = STRICT_REGEX.find(versionStr)
-            ?: throw SemverException("Version [$versionStr] is not a valid semver.")
+        val matchResult =
+            STRICT_REGEX.find(versionStr) ?: throw SemverException("Version [$versionStr] is not a valid semver.")
 
         major = parseInt(matchResult.groupValues[1])
         minor = parseInt(matchResult.groupValues[2])
@@ -93,91 +94,98 @@ class Semver : Comparable<Semver> {
      *
      * @return new incremented semver
      */
-    fun nextMajor() = Semver(
-        // Prerelease version 1.0.0-5 bumps to 1.0.0
-        major = if (minor != 0 || patch != 0 || preRelease.isEmpty()) major + 1 else major,
-        minor = 0,
-        patch = 0,
-        build = build,
-    )
+    fun nextMajor() =
+        Semver(
+            // Prerelease version 1.0.0-5 bumps to 1.0.0
+            major = if (minor != 0 || patch != 0 || preRelease.isEmpty()) major + 1 else major,
+            minor = 0,
+            patch = 0,
+            build = build,
+        )
 
     /**
      * Increments major by specified amount (`1` by default).
      *
      * @return new incremented semver
      */
-    fun withIncMajor(number: Int = 1) = Semver(
-        major = major + number,
-        minor = minor,
-        patch = patch,
-        preRelease = preRelease,
-        build = build,
-    )
+    fun withIncMajor(number: Int = 1) =
+        Semver(
+            major = major + number,
+            minor = minor,
+            patch = patch,
+            preRelease = preRelease,
+            build = build,
+        )
 
     /**
      * Increments minor to the next closest version.
      *
      * @return new incremented semver
      */
-    fun nextMinor() = Semver(
-        major = major,
-        // Prerelease version 1.2.0-5 bumps to 1.2.0
-        minor = if (patch != 0 || preRelease.isEmpty()) minor + 1 else minor,
-        patch = 0,
-        build = build,
-    )
+    fun nextMinor() =
+        Semver(
+            major = major,
+            // Prerelease version 1.2.0-5 bumps to 1.2.0
+            minor = if (patch != 0 || preRelease.isEmpty()) minor + 1 else minor,
+            patch = 0,
+            build = build,
+        )
 
     /**
      * Increments minor by specified amount (`1` by default).
      *
      * @return new incremented semver
      */
-    fun withIncMinor(number: Int = 1) = Semver(
-        major = major,
-        minor = minor + number,
-        patch = patch,
-        preRelease = preRelease,
-        build = build,
-    )
+    fun withIncMinor(number: Int = 1) =
+        Semver(
+            major = major,
+            minor = minor + number,
+            patch = patch,
+            preRelease = preRelease,
+            build = build,
+        )
 
     /**
      * Increments patch to the next closest version.
      *
      * @return new incremented semver
      */
-    fun nextPatch() = Semver(
-        major = major,
-        minor = minor,
-        // Prerelease version 1.2.0-5 bumps to 1.2.0
-        patch = if (preRelease.isEmpty()) patch + 1 else patch,
-        build = build,
-    )
+    fun nextPatch() =
+        Semver(
+            major = major,
+            minor = minor,
+            // Prerelease version 1.2.0-5 bumps to 1.2.0
+            patch = if (preRelease.isEmpty()) patch + 1 else patch,
+            build = build,
+        )
 
     /**
      * Increments patch by specified amount (`1` by default).
      *
      * @return new incremented semver
      */
-    fun withIncPatch(number: Int = 1) = Semver(
-        major = major,
-        minor = minor,
-        patch = patch + number,
-        preRelease = preRelease,
-        build = build,
-    )
+    fun withIncPatch(number: Int = 1) =
+        Semver(
+            major = major,
+            minor = minor,
+            patch = patch + number,
+            preRelease = preRelease,
+            build = build,
+        )
 
     /**
      * Sets pre-release version.
      *
      * @return semver with new pre-release
      */
-    fun withPreRelease(newPreRelease: List<String>) = Semver(
-        major = major,
-        minor = minor,
-        patch = patch,
-        preRelease = newPreRelease,
-        build = build,
-    )
+    fun withPreRelease(newPreRelease: List<String>) =
+        Semver(
+            major = major,
+            minor = minor,
+            patch = patch,
+            preRelease = newPreRelease,
+            build = build,
+        )
 
     /**
      * Sets pre-release version with dot-delineated string.
@@ -191,13 +199,14 @@ class Semver : Comparable<Semver> {
      *
      * @return semver with new build
      */
-    fun withBuild(newBuild: List<String>) = Semver(
-        major = major,
-        minor = minor,
-        patch = patch,
-        preRelease = preRelease,
-        build = newBuild,
-    )
+    fun withBuild(newBuild: List<String>) =
+        Semver(
+            major = major,
+            minor = minor,
+            patch = patch,
+            preRelease = preRelease,
+            build = newBuild,
+        )
 
     /**
      * Sets build version with dot-delineated string.
@@ -247,14 +256,15 @@ class Semver : Comparable<Semver> {
      * @param version [Semver] instance to compare
      * @return the greatest difference
      */
-    fun diff(version: Semver) = when {
-        major != version.major -> VersionDiff.MAJOR
-        minor != version.minor -> VersionDiff.MINOR
-        patch != version.patch -> VersionDiff.PATCH
-        preRelease != version.preRelease -> VersionDiff.PRE_RELEASE
-        build != version.build -> VersionDiff.BUILD
-        else -> VersionDiff.NONE
-    }
+    fun diff(version: Semver) =
+        when {
+            major != version.major -> VersionDiff.MAJOR
+            minor != version.minor -> VersionDiff.MINOR
+            patch != version.patch -> VersionDiff.PATCH
+            preRelease != version.preRelease -> VersionDiff.PRE_RELEASE
+            build != version.build -> VersionDiff.BUILD
+            else -> VersionDiff.NONE
+        }
 
     /**
      * Checks whether the given version is API compatible with this version.
@@ -461,13 +471,20 @@ class Semver : Comparable<Semver> {
     }
 }
 
-private fun parseInt(intStr: String) = intStr.toIntOrNull()
-    ?.takeIf { it >= 0 }
-    ?: throw SemverException("Value [$intStr] must be a number between 0 and ${Int.MAX_VALUE}")
+private fun parseInt(intStr: String) =
+    intStr.toIntOrNull()
+        ?.takeIf { it >= 0 }
+        ?: throw SemverException("Value [$intStr] must be a number between 0 and ${Int.MAX_VALUE}")
 
 private fun parseList(listStr: String) = listStr.split(".").filter { it.trim().isNotEmpty() }
 
-private fun createVersion(major: Int, minor: Int, patch: Int, preRelease: List<String>, build: List<String>): String {
+private fun createVersion(
+    major: Int,
+    minor: Int,
+    patch: Int,
+    preRelease: List<String>,
+    build: List<String>,
+): String {
     return buildString {
         append("$major.$minor.$patch")
         if (preRelease.isNotEmpty()) append("-${preRelease.joinToString(".")}")

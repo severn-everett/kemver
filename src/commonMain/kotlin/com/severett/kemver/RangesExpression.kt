@@ -91,13 +91,19 @@ class RangesExpression internal constructor(range: Range) {
          * @param version should be a valid semver string.
          */
         @JvmStatic
-        fun equal(version: String, builder: RangesExpression.() -> Unit) = equal(Semver(version), builder)
+        fun equal(
+            version: String,
+            builder: RangesExpression.() -> Unit,
+        ) = equal(Semver(version), builder)
 
         /**
          * Expression for equal range item and accompanying builder lambda.
          */
         @JvmStatic
-        fun equal(version: Semver, builder: RangesExpression.() -> Unit) = equal(version).apply(builder)
+        fun equal(
+            version: Semver,
+            builder: RangesExpression.() -> Unit,
+        ) = equal(version).apply(builder)
 
         /**
          * Expression for greater range item.
@@ -119,13 +125,19 @@ class RangesExpression internal constructor(range: Range) {
          * @param version should be a valid semver string.
          */
         @JvmStatic
-        fun greater(version: String, builder: RangesExpression.() -> Unit) = greater(Semver(version), builder)
+        fun greater(
+            version: String,
+            builder: RangesExpression.() -> Unit,
+        ) = greater(Semver(version), builder)
 
         /**
          * Expression for greater range item and accompanying builder lambda.
          */
         @JvmStatic
-        fun greater(version: Semver, builder: RangesExpression.() -> Unit) = greater(version).apply(builder)
+        fun greater(
+            version: Semver,
+            builder: RangesExpression.() -> Unit,
+        ) = greater(version).apply(builder)
 
         /**
          * Expression for greater or equal range item.
@@ -147,15 +159,19 @@ class RangesExpression internal constructor(range: Range) {
          * @param version should be a valid semver string
          */
         @JvmStatic
-        fun greaterOrEqual(version: String, builder: RangesExpression.() -> Unit) =
-            greaterOrEqual(Semver(version), builder)
+        fun greaterOrEqual(
+            version: String,
+            builder: RangesExpression.() -> Unit,
+        ) = greaterOrEqual(Semver(version), builder)
 
         /**
          * Expression for greater or equal range item and accompanying builder lambda.
          */
         @JvmStatic
-        fun greaterOrEqual(version: Semver, builder: RangesExpression.() -> Unit) =
-            greaterOrEqual(version).apply(builder)
+        fun greaterOrEqual(
+            version: Semver,
+            builder: RangesExpression.() -> Unit,
+        ) = greaterOrEqual(version).apply(builder)
 
         /**
          * Expression for less range item.
@@ -177,15 +193,19 @@ class RangesExpression internal constructor(range: Range) {
          * @param version should be a valid semver string
          */
         @JvmStatic
-        fun less(version: String, builder: RangesExpression.() -> Unit) =
-            less(Semver(version), builder)
+        fun less(
+            version: String,
+            builder: RangesExpression.() -> Unit,
+        ) = less(Semver(version), builder)
 
         /**
          * Expression for less range item and accompanying builder lambda.
          */
         @JvmStatic
-        fun less(version: Semver, builder: RangesExpression.() -> Unit) =
-            less(version).apply(builder)
+        fun less(
+            version: Semver,
+            builder: RangesExpression.() -> Unit,
+        ) = less(version).apply(builder)
 
         /**
          * Expression for less or equal range item.
@@ -207,14 +227,18 @@ class RangesExpression internal constructor(range: Range) {
          * @param version should be a valid semver string
          */
         @JvmStatic
-        fun lessOrEqual(version: String, builder: RangesExpression.() -> Unit) =
-            lessOrEqual(Semver(version), builder)
+        fun lessOrEqual(
+            version: String,
+            builder: RangesExpression.() -> Unit,
+        ) = lessOrEqual(Semver(version), builder)
 
         /**
          * Expression for less or equal range item and accompanying builder lambda.
          */
         @JvmStatic
-        fun lessOrEqual(version: Semver, builder: RangesExpression.() -> Unit) =
-            lessOrEqual(version).apply(builder)
+        fun lessOrEqual(
+            version: Semver,
+            builder: RangesExpression.() -> Unit,
+        ) = lessOrEqual(version).apply(builder)
     }
 }

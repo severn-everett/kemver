@@ -12,46 +12,48 @@ import com.severett.kemver.processor.XRangeProcessor
  */
 object RangesListFactory {
     private val splitterRegex = Regex("(\\s*)([<>]?=?)\\s*")
-    private val comparatorRegex = Regex(
-        "^([<>]?=?)\\s*(v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)" +
+    private val comparatorRegex =
+        Regex(
+            "^([<>]?=?)\\s*(v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)" +
                 "(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][a-zA-Z0-9-]*))*))?" +
-                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)$|^$"
-    )
+                "(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?)$|^$",
+        )
     private val sectionsRegex = Regex("\\|\\|")
     private val spacesRegex = Regex("\\s+")
-    private val processors = listOf(
-        GreaterThanOrEqualZeroProcessor,
-        IvyProcessor,
-        HyphenProcessor,
-        CaretProcessor,
-        TildeProcessor,
-        XRangeProcessor,
-    )
+    private val processors =
+        listOf(
+            GreaterThanOrEqualZeroProcessor,
+            IvyProcessor,
+            HyphenProcessor,
+            CaretProcessor,
+            TildeProcessor,
+            XRangeProcessor,
+        )
 
     fun create(rangesExpression: RangesExpression) = rangesExpression.get()
 
     fun create(range: String): RangesList {
-        val rangesList = range.trim()
-            .split(sectionsRegex)
-            .map { rangeSection ->
-                val trimmedRangeSection = splitterRegex.replace(rangeSection) {
-                    "${it.groupValues[1]}${it.groupValues[2]}"
-                }.trim()
-                val processedRangesSection = processors.fold(trimmedRangeSection) { acc, processor ->
-                    processor.process(acc)
+        val rangesList =
+            range.trim()
+                .split(sectionsRegex)
+                .map { rangeSection ->
+                    val trimmedRangeSection =
+                        splitterRegex.replace(rangeSection) { "${it.groupValues[1]}${it.groupValues[2]}" }.trim()
+                    val processedRangesSection =
+                        processors.fold(trimmedRangeSection) { acc, processor -> processor.process(acc) }
+                    createRanges(processedRangesSection)
                 }
-                createRanges(processedRangesSection)
-            }
         return RangesList(rangesList)
     }
 
-    private fun createRanges(range: String): List<Range> = range.split(spacesRegex)
-        .mapNotNull { parsedRange ->
-            comparatorRegex.matchEntire(parsedRange)?.let { matchResult ->
-                Range(
-                    rangeVersion = matchResult.groupValues[2],
-                    rangeOperator = Range.RangeOperator.value(matchResult.groupValues[1])
-                )
+    private fun createRanges(range: String): List<Range> =
+        range.split(spacesRegex)
+            .mapNotNull { parsedRange ->
+                comparatorRegex.matchEntire(parsedRange)?.let { matchResult ->
+                    Range(
+                        rangeVersion = matchResult.groupValues[2],
+                        rangeOperator = Range.RangeOperator.value(matchResult.groupValues[1]),
+                    )
+                }
             }
-        }
 }

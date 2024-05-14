@@ -12,7 +12,7 @@ class GreaterThanOrEqualZeroProcessorTest : FunSpec({
         "latest" to ALL_RANGE_STR,
         "latest.integration" to ALL_RANGE_STR,
         "*" to ALL_RANGE_STR,
-        "OTHER" to "OTHER"
+        "OTHER" to "OTHER",
     ).forEach { (range, expectedStr) ->
         test("Processing expression [$range] should produce string [$expectedStr]".stripDots()) {
             GreaterThanOrEqualZeroProcessor.process(range) shouldBe expectedStr

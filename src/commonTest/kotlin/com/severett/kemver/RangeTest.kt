@@ -27,7 +27,7 @@ class RangeTest : FunSpec({
     ).forEach { (rangeVersion, version, expectedResult) ->
         val range = Range(rangeVersion, Range.RangeOperator.EQ)
         test("isSatisfiedBy() for Range [$range] against Semver [$version] should evaluate to $expectedResult".stripDots()) {
-             range isSatisfiedBy version shouldBe expectedResult
+            range isSatisfiedBy version shouldBe expectedResult
         }
     }
 

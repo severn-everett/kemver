@@ -4,9 +4,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.9.23"
+    kotlin("multiplatform") version "1.9.24"
     id("org.jetbrains.dokka") version "1.9.20"
     id("io.kotest.multiplatform") version "5.8.1"
+    id("org.jmailen.kotlinter") version "4.3.0"
 }
 
 group = "com.severett"

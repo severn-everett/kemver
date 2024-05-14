@@ -40,9 +40,7 @@ class RangesList(rangesList: List<List<Range>> = listOf()) {
     /**
      * Add ranges to ranges list.
      */
-    fun add(ranges: List<Range>) = this.apply {
-        if (ranges.isNotEmpty()) rangesList.add(ranges)
-    }
+    fun add(ranges: List<Range>) = this.apply { if (ranges.isNotEmpty()) rangesList.add(ranges) }
 
     /**
      * Return the list of range lists
@@ -59,12 +57,13 @@ class RangesList(rangesList: List<List<Range>> = listOf()) {
     /**
      * check whether this ranges list is satisfied by the given version.
      */
-    infix fun isSatisfiedBy(version: Semver) = rangesList.any {
-        isSingleSetOfRangesIsSatisfied(ranges = it, version = version)
-    }
+    infix fun isSatisfiedBy(version: Semver) =
+        rangesList
+            .any { isSingleSetOfRangesIsSatisfied(ranges = it, version = version) }
 
-    override fun toString() = rangesList.joinToString(OR_JOINER, transform = ::formatRanges)
-        .replace(regex = PARENTHESES_REGEX, replacement = "\$1")
+    override fun toString() =
+        rangesList.joinToString(OR_JOINER, transform = ::formatRanges)
+            .replace(regex = PARENTHESES_REGEX, replacement = "\$1")
 }
 
 private fun formatRanges(ranges: List<Range>): String {
@@ -73,15 +72,18 @@ private fun formatRanges(ranges: List<Range>): String {
     return if (ranges.size > 1) "($representation)" else representation
 }
 
-private fun isSingleSetOfRangesIsSatisfied(ranges: List<Range>, version: Semver) = when {
+private fun isSingleSetOfRangesIsSatisfied(
+    ranges: List<Range>,
+    version: Semver,
+) = when {
     ranges.any { !it.isSatisfiedBy(version) } -> false
     version.preRelease.isNotEmpty() -> {
         ranges.any { range ->
             val rangeSemver = range.rangeVersion
             rangeSemver.preRelease.isNotEmpty() &&
-                    version.major == rangeSemver.major &&
-                    version.minor == rangeSemver.minor &&
-                    version.patch == rangeSemver.patch
+                version.major == rangeSemver.major &&
+                version.minor == rangeSemver.minor &&
+                version.patch == rangeSemver.patch
         }
     }
 

@@ -27,37 +27,41 @@ class RangesExpressionTest : FunSpec({
     }
 
     test("A complex range expression should be built".stripDots()) {
-        val rangeExpressions = equal("1.0.0")
-            .and(
-                equal("2.0.0")
-                    .and(equal("3.0.0"))
-                    .or(greater("4.0.0").and(less("5.0.0")))
-                    .or(equal("6.0.0"))
-            ).and(greaterOrEqual("7.0.0"))
-            .and(lessOrEqual("8.0.0"))
-            .or(less("9.0.0"))
+        val rangeExpressions =
+            equal("1.0.0")
+                .and(
+                    equal("2.0.0")
+                        .and(equal("3.0.0"))
+                        .or(greater("4.0.0").and(less("5.0.0")))
+                        .or(equal("6.0.0")),
+                ).and(greaterOrEqual("7.0.0"))
+                .and(lessOrEqual("8.0.0"))
+                .or(less("9.0.0"))
 
-        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
+        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) " +
+            "or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
     }
 
     test("A complex range expression should be built using lambdas".stripDots()) {
-        val rangeExpressions = equal("1.0.0") {
-            and {
-                equal("2.0.0") {
-                    and { equal("3.0.0") }
-                    or {
-                        greater("4.0.0") {
-                            and { less("5.0.0") {} }
+        val rangeExpressions =
+            equal("1.0.0") {
+                and {
+                    equal("2.0.0") {
+                        and { equal("3.0.0") }
+                        or {
+                            greater("4.0.0") {
+                                and { less("5.0.0") {} }
+                            }
                         }
+                        or { equal("6.0.0") }
                     }
-                    or { equal("6.0.0") }
                 }
+                and { greaterOrEqual("7.0.0") {} }
+                and { lessOrEqual("8.0.0") {} }
+                or { less("9.0.0") }
             }
-            and { greaterOrEqual("7.0.0") {} }
-            and { lessOrEqual("8.0.0") {} }
-            or { less("9.0.0") }
-        }
 
-        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
+        rangeExpressions.get().toString() shouldBe "(=1.0.0 and =2.0.0 and =3.0.0) or (>4.0.0 and <5.0.0) " +
+            "or =6.0.0 or (>=7.0.0 and <=8.0.0) or <9.0.0"
     }
 })

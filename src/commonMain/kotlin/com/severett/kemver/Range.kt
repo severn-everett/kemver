@@ -4,7 +4,6 @@ package com.severett.kemver
  * Represents a single range item.
  */
 data class Range(val rangeVersion: Semver, private val rangeOperator: RangeOperator) {
-
     /**
      * Check for whether this range is satisfied by any version.
      */
@@ -26,13 +25,14 @@ data class Range(val rangeVersion: Semver, private val rangeOperator: RangeOpera
      * @param version the version to check
      * @return `true` if the range is satisfied by the version, otherwise `false`.
      */
-    infix fun isSatisfiedBy(version: Semver) = when (rangeOperator) {
-        RangeOperator.EQ -> version.isEquivalentTo(rangeVersion)
-        RangeOperator.LT -> version.isLowerThan(rangeVersion)
-        RangeOperator.LTE -> version.isLowerThanOrEqualTo(rangeVersion)
-        RangeOperator.GT -> version.isGreaterThan(rangeVersion)
-        RangeOperator.GTE -> version.isGreaterThanOrEqualTo(rangeVersion)
-    }
+    infix fun isSatisfiedBy(version: Semver) =
+        when (rangeOperator) {
+            RangeOperator.EQ -> version.isEquivalentTo(rangeVersion)
+            RangeOperator.LT -> version.isLowerThan(rangeVersion)
+            RangeOperator.LTE -> version.isLowerThanOrEqualTo(rangeVersion)
+            RangeOperator.GT -> version.isGreaterThan(rangeVersion)
+            RangeOperator.GTE -> version.isGreaterThanOrEqualTo(rangeVersion)
+        }
 
     override fun toString() = rangeOperator.asString + rangeVersion
 
@@ -60,7 +60,8 @@ data class Range(val rangeVersion: Semver, private val rangeOperator: RangeOpera
         /**
          * The version is greater than or equivalent to the requirement.
          */
-        GTE(">=");
+        GTE(">="),
+        ;
 
         /**
          * String representation of the range operator.
@@ -68,12 +69,13 @@ data class Range(val rangeVersion: Semver, private val rangeOperator: RangeOpera
         val asString = string
 
         companion object {
-            fun value(string: String) = if (string.isEmpty()) {
-                EQ
-            } else {
-                entries.find { it.string == string }
-                    ?: throw IllegalArgumentException("Range operator for '$string' not found")
-            }
+            fun value(string: String) =
+                if (string.isEmpty()) {
+                    EQ
+                } else {
+                    entries.find { it.string == string }
+                        ?: throw IllegalArgumentException("Range operator for '$string' not found")
+                }
         }
     }
 }

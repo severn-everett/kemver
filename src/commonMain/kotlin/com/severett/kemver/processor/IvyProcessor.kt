@@ -24,12 +24,12 @@ object IvyProcessor : Processor {
     private const val RIGHT_BRACKET = "]"
     private const val LEFT_PARENTHESIS = "("
     private const val RIGHT_PARENTHESIS = ")"
+
     // Need to escape the final right square bracket due to it being an illegal
     // character in the unicode-enabled Regex object on the JS platform
     @Suppress("RegExpRedundantEscape")
-    private val regex = Regex(
-        "^([\\[\\](])([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?,([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?([\\]\\[)])$"
-    )
+    private val regex =
+        Regex("^([\\[\\](])([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?,([0-9]+)?\\.?([0-9]+)?\\.?([0-9]+)?([\\]\\[)])$")
     private val rangeBrackets = listOf(LEFT_BRACKET, RIGHT_BRACKET)
 
     override fun process(range: String): String {
@@ -52,7 +52,7 @@ object IvyProcessor : Processor {
             if (closeSign.isInclusiveRange()) {
                 val toOperator = if (closeSign == RIGHT_BRACKET) Range.RangeOperator.LTE else Range.RangeOperator.LT
                 return "${fromOperator.asString}$fromMajor.$fromMinor.$fromPatch " +
-                        "${toOperator.asString}$toMajor.$toMinor.$toPatch"
+                    "${toOperator.asString}$toMajor.$toMinor.$toPatch"
             } else if (closeSign == RIGHT_PARENTHESIS) {
                 return "${fromOperator.asString}$fromMajor.$fromMinor.$fromPatch"
             }

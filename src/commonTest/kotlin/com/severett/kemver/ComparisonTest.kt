@@ -6,45 +6,48 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
-private val SEMVER_PAIRS = listOf(
-    Semver("2.0.0") to Semver("1.0.0"),
-    Semver("1.1.0") to Semver("1.0.0"),
-    Semver("1.0.1") to Semver("1.0.0"),
-    Semver("1.0.0") to Semver("1.0.0-alpha"),
-    Semver("1.0.0-alpha.1") to Semver("1.0.0-alpha"),
-    Semver("1.0.0-beta") to Semver("1.0.0-alpha"),
-    Semver("1.0.0-alpha2") to Semver("1.0.0-alpha1"),
-    Semver("1.0.0-alpha1a") to Semver("1.0.0-alpha"),
-    Semver("1.0.0-alpha1b") to Semver("1.0.0-alpha1a"),
-    Semver("1.0.0-20240111143214") to Semver("1.0.0-20240111143213"),
-    Semver("1.0.0-a1a1b") to Semver("1.0.0-a1a1a"),
-)
+private val SEMVER_PAIRS =
+    listOf(
+        Semver("2.0.0") to Semver("1.0.0"),
+        Semver("1.1.0") to Semver("1.0.0"),
+        Semver("1.0.1") to Semver("1.0.0"),
+        Semver("1.0.0") to Semver("1.0.0-alpha"),
+        Semver("1.0.0-alpha.1") to Semver("1.0.0-alpha"),
+        Semver("1.0.0-beta") to Semver("1.0.0-alpha"),
+        Semver("1.0.0-alpha2") to Semver("1.0.0-alpha1"),
+        Semver("1.0.0-alpha1a") to Semver("1.0.0-alpha"),
+        Semver("1.0.0-alpha1b") to Semver("1.0.0-alpha1a"),
+        Semver("1.0.0-20240111143214") to Semver("1.0.0-20240111143213"),
+        Semver("1.0.0-a1a1b") to Semver("1.0.0-a1a1a"),
+    )
 
 class ComparisonTest : FunSpec({
     test("Should sort versions") {
-        val semvers = listOf(
-            Semver("1.2.3"),
-            Semver("1.2.3-rc3"),
-            Semver("1.2.3-rc2"),
-            Semver("1.2.3-rc1"),
-            Semver("1.2.2"),
-            Semver("1.2.2-rc2"),
-            Semver("1.2.2-rc1"),
-            Semver("1.2.0"),
-            Semver("1.2.2-beta.1"),
-        ).sorted()
+        val semvers =
+            listOf(
+                Semver("1.2.3"),
+                Semver("1.2.3-rc3"),
+                Semver("1.2.3-rc2"),
+                Semver("1.2.3-rc1"),
+                Semver("1.2.2"),
+                Semver("1.2.2-rc2"),
+                Semver("1.2.2-rc1"),
+                Semver("1.2.0"),
+                Semver("1.2.2-beta.1"),
+            ).sorted()
 
-        semvers.map(Semver::version) shouldBe listOf(
-            "1.2.0",
-            "1.2.2-beta.1",
-            "1.2.2-rc1",
-            "1.2.2-rc2",
-            "1.2.2",
-            "1.2.3-rc1",
-            "1.2.3-rc2",
-            "1.2.3-rc3",
-            "1.2.3",
-        )
+        semvers.map(Semver::version) shouldBe
+            listOf(
+                "1.2.0",
+                "1.2.2-beta.1",
+                "1.2.2-rc1",
+                "1.2.2-rc2",
+                "1.2.2",
+                "1.2.3-rc1",
+                "1.2.3-rc2",
+                "1.2.3-rc3",
+                "1.2.3",
+            )
     }
 
     SEMVER_PAIRS.forEach { (semver, otherSemver) ->
@@ -104,7 +107,7 @@ class ComparisonTest : FunSpec({
     }
 
     test("Semver [1.0.0+alpha] should be equal to string [1.0.0+alpha]".stripDots()) {
-        (Semver("1.0.0+alpha") isEqualTo  "1.0.0+alpha").shouldBeTrue()
+        (Semver("1.0.0+alpha") isEqualTo "1.0.0+alpha").shouldBeTrue()
     }
 
     test("Semver [1.0.0+alpha] should not be equal to Semver [1.0.0+beta]".stripDots()) {

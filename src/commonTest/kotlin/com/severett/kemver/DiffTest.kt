@@ -11,13 +11,14 @@ private val BASE_PRERELEASE = listOf("PreRelease")
 private val BASE_BUILD = listOf("Build")
 
 class DiffTest : FunSpec({
-    val baseSemver = Semver(
-        major = BASE_MAJOR,
-        minor = BASE_MINOR,
-        patch = BASE_PATCH,
-        preRelease = BASE_PRERELEASE,
-        build = BASE_BUILD,
-    )
+    val baseSemver =
+        Semver(
+            major = BASE_MAJOR,
+            minor = BASE_MINOR,
+            patch = BASE_PATCH,
+            preRelease = BASE_PRERELEASE,
+            build = BASE_BUILD,
+        )
 
     fun createSemver(
         major: Int = BASE_MAJOR,

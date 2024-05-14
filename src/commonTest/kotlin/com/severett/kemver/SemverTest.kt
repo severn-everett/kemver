@@ -67,9 +67,7 @@ class SemverTest : FunSpec({
         "1.1.1.1",
     ).forEach { invalid ->
         test("Parsing invalid string [$invalid] should throw an exception".stripDots()) {
-            val thrownException = shouldThrow<SemverException> {
-                Semver(invalid)
-            }
+            val thrownException = shouldThrow<SemverException> { Semver(invalid) }
             thrownException.message shouldBe "Version [$invalid] is not a valid semver."
         }
     }
@@ -80,22 +78,22 @@ class SemverTest : FunSpec({
         InvalidNumberParams(
             title = "Invalid number string should cause a parsing exception",
             semverInit = { Semver("99999999999999999999999.1.1") },
-            expectedMessage = "Value [99999999999999999999999] must be a number between 0 and ${Int.MAX_VALUE}"
+            expectedMessage = "Value [99999999999999999999999] must be a number between 0 and ${Int.MAX_VALUE}",
         ),
         InvalidNumberParams(
             title = "Invalid major should cause an instantiation exception",
             semverInit = { Semver(-1, 0, 0) },
-            expectedMessage = "Major [-1] should be >= 0"
+            expectedMessage = "Major [-1] should be >= 0",
         ),
         InvalidNumberParams(
             title = "Invalid minor should cause an instantiation exception",
             semverInit = { Semver(0, -1, 0) },
-            expectedMessage = "Minor [-1] should be >= 0"
+            expectedMessage = "Minor [-1] should be >= 0",
         ),
         InvalidNumberParams(
             title = "Invalid patch should cause an instantiation exception",
             semverInit = { Semver(0, 0, -1) },
-            expectedMessage = "Patch [-1] should be >= 0"
+            expectedMessage = "Patch [-1] should be >= 0",
         ),
     ).forEach { (title, semverInit, expectedMessage) ->
         test(title.stripDots()) {
@@ -194,16 +192,19 @@ class SemverTest : FunSpec({
     }
 
     test("Semver should allow for custom formatting".stripDots()) {
-        val semver = Semver(
-            major = 1,
-            minor = 2,
-            patch = 3,
-            preRelease = listOf("alpha", "beta"),
-            build = listOf("a1", "b2"),
-        )
-        val semverStr = semver.format { s ->
-            "${s.major}:${s.minor}:${s.patch}|${s.preRelease.joinToString("&")}*${s.build.joinToString("&")}"
-        }
+        val semver =
+            Semver(
+                major = 1,
+                minor = 2,
+                patch = 3,
+                preRelease = listOf("alpha", "beta"),
+                build = listOf("a1", "b2"),
+            )
+        val semverStr =
+            semver.format { s ->
+                "${s.major}:${s.minor}:${s.patch}|" +
+                    "${s.preRelease.joinToString("&")}*${s.build.joinToString("&")}"
+            }
 
         semverStr shouldBe "1:2:3|alpha&beta*a1&b2"
     }
@@ -329,7 +330,7 @@ class SemverTest : FunSpec({
     ).forEach { (version, rangeStr, expectedSatisfies) ->
         test(
             "Semver [$version] should return $expectedSatisfies on a satisfy check against string [$rangeStr]"
-                .stripDots()
+                .stripDots(),
         ) {
             Semver(version) satisfies rangeStr shouldBe expectedSatisfies
         }

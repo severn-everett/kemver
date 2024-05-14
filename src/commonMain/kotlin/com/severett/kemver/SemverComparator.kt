@@ -12,7 +12,10 @@ internal object SemverComparator {
     private const val TRAILING_DIGITS_EXTRACT = "(?<=\\D)(?=\\d)"
     private const val LEADING_DIGITS_EXTRACT = "(?<=\\d)(?=\\D)"
 
-    fun compare(semver: Semver, otherSemver: Semver): Int {
+    fun compare(
+        semver: Semver,
+        otherSemver: Semver,
+    ): Int {
         val mainResult = mainCompare(semver, otherSemver)
         return if (mainResult == EQUAL) {
             preReleaseCompare(semver, otherSemver)
@@ -21,7 +24,10 @@ internal object SemverComparator {
         }
     }
 
-    private fun mainCompare(semver: Semver, otherSemver: Semver): Int {
+    private fun mainCompare(
+        semver: Semver,
+        otherSemver: Semver,
+    ): Int {
         val majorCompare = semver.major.compareTo(otherSemver.major)
         return if (majorCompare == EQUAL) {
             val minorCompare = semver.minor.compareTo(otherSemver.minor)
@@ -35,7 +41,10 @@ internal object SemverComparator {
         }
     }
 
-    private fun preReleaseCompare(semver: Semver, otherSemver: Semver): Int {
+    private fun preReleaseCompare(
+        semver: Semver,
+        otherSemver: Semver,
+    ): Int {
         if (semver.preRelease.isNotEmpty() && otherSemver.preRelease.isEmpty()) {
             return LESS_THAN
         } else if (semver.preRelease.isEmpty()) {
@@ -56,12 +65,15 @@ internal object SemverComparator {
                 subPreRelease == otherSubPreRelease -> i++
                 else -> return compareIdentifiers(subPreRelease, otherSubPreRelease)
             }
-        } while(maxElements > i)
+        } while (maxElements > i)
 
         return EQUAL
     }
 
-    private fun compareIdentifiers(identifier: String, otherIdentifier: String): Int {
+    private fun compareIdentifiers(
+        identifier: String,
+        otherIdentifier: String,
+    ): Int {
         // Only attempt to parse fully/numeric string sequences so that we can avoid
         // raising a costly exception
         if (identifier.matches(ALL_DIGITS.toRegex()) && otherIdentifier.matches(ALL_DIGITS.toRegex())) {
@@ -78,7 +90,10 @@ internal object SemverComparator {
         return identifier.compareTo(otherIdentifier)
     }
 
-    private fun checkAlphanumericPreRelease(preRelease: String, otherPreRelease: String): Int? {
+    private fun checkAlphanumericPreRelease(
+        preRelease: String,
+        otherPreRelease: String,
+    ): Int? {
         val tokenArr = preRelease.split(TRAILING_DIGITS_EXTRACT)
         val otherTokenArr = otherPreRelease.split(TRAILING_DIGITS_EXTRACT)
         return if (tokenArr[0] == otherTokenArr[0]) {

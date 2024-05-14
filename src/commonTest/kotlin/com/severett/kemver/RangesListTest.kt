@@ -20,15 +20,16 @@ class RangesListTest : FunSpec({
         "3.0.0-beta" to true,
         "3.0.1-alpha" to false,
     ).forEach { (version, expectedResult) ->
-        val rangesList = RangesList(
-            listOf(
+        val rangesList =
+            RangesList(
                 listOf(
-                    Range("1.0.0", Range.RangeOperator.GTE),
-                    Range("2.0.0", Range.RangeOperator.LTE),
+                    listOf(
+                        Range("1.0.0", Range.RangeOperator.GTE),
+                        Range("2.0.0", Range.RangeOperator.LTE),
+                    ),
+                    listOf(Range("3.0.0-alpha", Range.RangeOperator.GTE)),
                 ),
-                listOf(Range("3.0.0-alpha", Range.RangeOperator.GTE)),
-            ),
-        )
+            )
         test("isSatisfiedBy on Semver[$version] for RangesList[$rangesList] should evaluate to $expectedResult".stripDots()) {
             rangesList isSatisfiedBy version shouldBe expectedResult
         }
@@ -36,22 +37,24 @@ class RangesListTest : FunSpec({
 
     listOf(
         Pair(
-            first = listOf(
-                listOf(Range("2.6.8", Range.RangeOperator.LTE)),
+            first =
                 listOf(
-                    Range("3.0.0", Range.RangeOperator.GTE),
-                    Range("3.0.1", Range.RangeOperator.LTE)
+                    listOf(Range("2.6.8", Range.RangeOperator.LTE)),
+                    listOf(
+                        Range("3.0.0", Range.RangeOperator.GTE),
+                        Range("3.0.1", Range.RangeOperator.LTE),
+                    ),
                 ),
-            ),
             second = "<=2.6.8 or (>=3.0.0 and <=3.0.1)",
         ),
         Pair(
-            first = listOf(
+            first =
                 listOf(
-                    Range("3.0.0", Range.RangeOperator.GTE),
-                    Range("3.0.1", Range.RangeOperator.LTE)
+                    listOf(
+                        Range("3.0.0", Range.RangeOperator.GTE),
+                        Range("3.0.1", Range.RangeOperator.LTE),
+                    ),
                 ),
-            ),
             second = ">=3.0.0 and <=3.0.1",
         ),
     ).forEach { (rangeLists, expectedStr) ->
